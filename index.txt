@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Manual de Conduta - Edifício Portugal</title><link rel="stylesheet" href="style.css"></head>
+<body>
+  <div class="container">
+    <header class="header">
+      <div class="brand"><img src="assets/logo_edificio_portugal.jpg" alt="Edifício Portugal"></div>
+      <div class="title">
+        <h1>Manual de Conduta do Morador</h1>
+        <p>Edifício Portugal – Versão 2025</p>
+        <p class="quote">"O sucesso é a soma de pequenos esforços repetidos dia após dia."</p>
+      </div>
+    </header>
+
+    <nav class="nav" aria-label="Navegação manual">
+      <a class="btn btn-1" href="#obras">🛠️ Obras</a>
+      <a class="btn btn-2" href="#mudancas">🚚 Mudanças</a>
+      <a class="btn btn-3" href="#lixo">🗑️ Lixeiras</a>
+      <a class="btn btn-4" href="#piscina">🏊 Piscina</a>
+      <a class="btn btn-5" href="#salao">🎉 Salão</a>
+      <a class="btn btn-6" href="#aluguel">📝 Aluguel</a>
+      <a class="btn btn-7" href="#garagem">🚗 Garagem</a>
+      <a class="btn btn-8" href="#bicicletas">🚲 Bicicletas</a>
+      <a class="btn btn-9" href="#animais">🐾 Animais</a>
+      <a class="btn btn-10" href="#silencio">🤫 Silêncio</a>
+      <a class="btn btn-11" href="#contatos">📞 Contatos</a>
+    </nav>
+
+    <main>
+      <section id="obras" class="card"><h2>🛠️ 1. Normas para Obras e Reformas</h2>
+        <p><strong>Horários permitidos:</strong></p><ul><li>Segunda a sexta-feira: <strong>08:00h às 17:00h</strong></li><li>Sábado: <strong>10:00h às 14:00h</strong></li></ul>
+        <p><strong>Proibido:</strong> É expressamente proibido fazer qualquer tipo de reforma ou manutenção nos domingos e feriados.</p><p><strong>Penalidade:</strong> Multa conforme regulamento.</p></section>
+
+      <section id="mudancas" class="card"><h2>🚚 2. Normas para Mudanças</h2>
+        <p><strong>Horários permitidos:</strong></p><ul><li>Segunda a sexta-feira: <strong>08:00h às 17:00h</strong></li><li>Sábado: <strong>10:00h às 14:00h</strong></li></ul>
+        <p><strong>Proibido:</strong> Mudanças aos domingos e feriados. Condômino presente ou responsável obrigatório.</p>
+        <p><strong>Procedimentos:</strong> O condômino deve estar presente ou nomear um responsável para acompanhar a mudança.</p></section>
+
+
+      <section id="lixo" class="card"><h2>🗑️ 3. Uso Correto das Lixeiras</h2>
+        <p><strong>O que fazer:</strong></p><ul><li>Vidros devem ser <strong>encaixotados</strong> e identificados.</li><li>Fraldas em sacos bem fechados.</li><li>Separar recicláveis: vidro, plástico, latas.</li></ul>
+        <p><strong>O que não fazer:</strong></p><ul><li>Não descartar lixo fora das lixeiras.</li><li>Não deixar resíduos pingando em áreas comuns.</li></ul></section>
+
+      <section id="piscina" class="card"><h2>🏊‍♀️ 4. Normas de Utilização da Piscina</h2>
+        <p><strong>É proibido:</strong></p><ul><li>Correr ao redor, pular de cabeça, empurrar pessoas, objetos de vidro, fumar, comer na água, animais.</li><li>Crianças sem supervisão.</li>
+        <li>Utilizar os itens da piscina em festas ou reuniões particulares.</li><li>Levar qualquer móvel ou objeto da piscina para fora da área da piscina.</li></ul><p>
+        <p><strong>Importante – Guarda-sóis e Pufes:</strong></p><ul><li>Os guarda-sóis e pufes não ficam permanentemente instalados na piscina.</li><li>Utilizá-los apenas na área da piscina.</li><li>Devolver imediatamente após o uso.</li>  
+        <p><strong>Higiene:</strong> Utilize a ducha antes de entrar</p></section>
+
+
+      <section id="salao" class="card"><h2>🎉 5. Aluguel do Salão de Festas</h2>
+        <p><strong>Utilização:</strong></p><ul><li>Agendamento pela zeladoria via WhatsApp.</li><li>Responsável deve deixar o salão limpo.</li><li>Convidados do salão não podem usar a piscina.</li></p></section>
+
+      <section id="aluguel" class="card"><h2>📝 6. Normas para Aluguel de Apartamentos</h2>
+        <p><strong>Responsabilidades do Proprietário:</strong></p><ul><li>Informar por escrito ao síndico nome completo, documento e período do inquilino.</li><li>Repassar as normas do condomínio ao inquilino.</li><li>Assumir responsabilidade por infrações do inquilino.</li></ul></section>
+
+      <section id="garagem" class="card"><h2>🚗 7. Normas de Uso e Aluguel de Garagem</h2>
+        <p><strong>É permitido:</strong></p><ul><li>O aluguel ou cessão de vaga entre condôminos ou inquilinos do mesmo edifício, desde que comunicado à administração ou síndico.</li>
+          <li>Cada unidade possui uma vaga de garagem.</li>
+          <li>Limite de velocidade 5 km/h.</li>
+          <li>Completar água do radiador.</li>
+          <li>Calibrar os pneus, é necessário que o morador possua o equipamento portatil.</li>
+          <li>Substituir lâmpadas queimadas.</li>
+          <li>Completar óleo do motor (sem derramamento e apenas com uso de recipiente apropriado).</li></ul><p>
+        <p><strong>É proibido:</strong></p><ul><li>Alugar vaga para pessoas que não residem no condominio.</li>
+          <li>Proibido correr, brincar ou andar de bicicleta na garagem – espaço não é área de lazer.</li>
+          <li>Proibido fumar, descartar lixo, ou deixar objetos pessoais (como cadeiras, caixas, plantas, etc.) no corredor ou em frente à vaga.</li>
+          <li>Em caso de mudança ou entrega de móveis grandes, o responsável deve avisar a zeladoria com antecedência para orientação sobre acesso e estacionamento temporário na vaga de carga e descarga.</li>
+           <li>Troca de óleo, filtro ou fluidos (freio, câmbio, direção hidráulica)</li>
+          <li>Funilaria ou pintura de veículos</li>
+          <li>Lavagem, aspiração ou limpeza detalhada do carro</li>
+          <li>Retirada de motor, câmbio ou qualquer peça pesada</li>
+          <li>Uso de ferramentas pesadas (macacos hidráulicos, martelos, maçaricos, etc.)</li>
+        <p><strong>📌 Importante:</strong> A garagem é um espaço comum e de circulação, não uma oficina. Manutenções mais complexas ou que gerem sujeira, barulho ou risco devem ser feitas em oficinas autorizadas.</p>
+        </section>
+        
+
+
+      <section id="bicicletas" class="card"><h2>🚲 8. Normas de Utilização de Bicicletas</h2>
+        <p>Bicicletas devem ser guardadas na garagem do subsolo; entrada/saída apenas pela garagem; é proibido circular de bicicleta nas áreas internas.</p></section>
+
+      <section id="animais" class="card"><h2>🐾 9. Normas sobre Animais de Estimação</h2>
+        <p>Animais na área da piscina são proibidos. Nas áreas comuns use coleira e recolha dejetos. Evite latidos excessivos.</p></section>
+
+      <section id="silencio" class="card"><h2>🤫 10. Regras de Silêncio e Boa Vizinhança</h2>
+        <p>Festas e barulhos que perturbem após as <strong>22h</strong> são proibidos. Mantenha volume moderado de TVs e aparelhos.</p></section>
+
+      <section id="contatos" class="card"><h2>📞 11. Contatos de Emergência e Zeladoria</h2>
+        <table><thead><tr><th>Situação</th><th>Telefone / Contato</th><th>Observações</th></tr></thead><tbody>
+        <tr><td>Incêndio ou resgate</td><td>193</td><td>Corpo de Bombeiros – 24h</td></tr>
+        <tr><td>Emergência policial</td><td>190</td><td>Polícia Militar</td></tr>
+        <tr><td>Emergência médica</td><td>192</td><td>SAMU – socorro rápido</td></tr>
+        <tr><td>Polícia Civil</td><td>197</td><td>Registro de BO</td></tr>
+        <tr><td>Disque Denúncia</td><td>181</td><td>Denúncias anônimas</td></tr>
+        <tr><td>Proteção a crianças/idosos</td><td>100</td><td>Disque Direitos Humanos</td></tr>
+        <tr><td>Apoio emocional (CVV)</td><td>188</td><td>Prevenção ao suicídio</td></tr>
+        <tr><td>Zeladoria (WhatsApp)</td><td>(11) 94256-0153 <button class="copy-btn" data-copy="(11) 94256-0153">Copiar</button></td><td>Manutenções e dúvidas</td></tr>
+        <tr><td>Portaria</td><td>Ramal 9 - Utilize o Interfone</td><td>Abertura de portão</td></tr>
+        </tbody></table></section>
+
+      <section class="card"><h2>📥 Compartilhe este Manual</h2><p>Leia, respeite e compartilhe com familiares, inquilinos e visitantes. Este é um compromisso coletivo.</p></section>
+    </main>
+
+    <footer>
+      <p>📧 Dúvidas? <a href="mailto:edportugal85@gmail.com">edportugal85@gmail.com</a></p>
+      <p>Síndico Profissional: <strong>Fernando Coelho</strong> – CRA: 148846</p>
+      <p>© 2025 – Edifício Portugal. Todos os direitos reservados.</p>
+    </footer>
+  </div>
+<script src="script.js"></script>
+</body>
+</html>
