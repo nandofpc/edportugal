@@ -83,8 +83,22 @@
       font-weight: bold;
       color: #444;
     }
+
+    .row {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 10px;
+    }
+    .row > div {
+      flex: 1;
+    }
+    .row label {
+      margin-bottom: 5px;
+    }
+
     input[type="text"],
-    input[type="date"] {
+    input[type="date"],
+    select {
       width: 100%;
       padding: 10px;
       border: 1px solid #ccc;
@@ -148,7 +162,7 @@
     <!-- Cabeçalho -->
     <div class="header">
       <div class="brand">
-        <img src="assets/logo_edificio_portugal.jpg" alt="Edifício Portugal">
+        <img src="logo_edificio_portugal.jpg" alt="Edifício Portugal">
       </div>
       <div class="title">
         <h1>Reservar Salão de Festas</h1>
@@ -159,7 +173,7 @@
     <!-- Informações -->
     <div class="info-text">
       <p><strong>Preencha os dados abaixo para reservar o salão de festas.</strong></p>
-      <p><strong>O Valor da reserva é de R$ 100,00. Depositar na conta do condominio.</strong></p>
+      <p><strong>O Valor da reserva é de R$ 100,00. Depositar na conta do condomínio.</strong></p>
       <p><strong>Atenção: não é permitido reservar nos dias 24/12, 25/12, 31/12 e 01/01.</strong></p>
     </div>
 
@@ -172,11 +186,30 @@
             <label>Nome Completo</label>
             <input type="text" name="nome_completo" required />
 
-            <label>Nº do Apartamento</label>
-            <input type="text" name="apartamento" required />
+            <!-- Campos lado a lado -->
+            <div class="row">
+              <div>
+                <label>Nº do Apartamento</label>
+                <select name="apartamento" required>
+                  <option value="">Selecione</option>
+                  <option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option>
+                  <option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option>
+                  <option value="31">31</option><option value="32">32</option><option value="33">33</option><option value="34">34</option>
+                  <option value="41">41</option><option value="42">42</option><option value="43">43</option><option value="44">44</option>
+                  <option value="51">51</option><option value="52">52</option><option value="53">53</option><option value="54">54</option>
+                  <option value="61">61</option><option value="62">62</option><option value="63">63</option><option value="64">64</option>
+                  <option value="71">71</option><option value="72">72</option><option value="73">73</option><option value="74">74</option>
+                  <option value="81">81</option><option value="82">82</option><option value="83">83</option><option value="84">84</option>
+                  <option value="91">91</option><option value="92">92</option><option value="93">93</option><option value="94">94</option>
+                  <option value="101">101</option><option value="102">102</option><option value="103">103</option><option value="104">104</option>
+                </select>
+              </div>
+              <div>
+                <label>Data da Reserva</label>
+                <input type="date" name="data_reserva" id="data_reserva" required />
+              </div>
+            </div>
 
-            <label>Data da Reserva</label>
-            <input type="date" name="data_reserva" id="data_reserva" required />
             <small>Dias indisponíveis: 24 e 25 de dezembro, 31 de dezembro e 1º de janeiro.</small>
           </div>
           <button type="submit">Confirmar Reserva</button>
@@ -236,7 +269,7 @@ Olá, gostaria de confirmar a reserva do salão de festas.
 *Morador:* ${nome}
 *Apartamento:* ${apto}
 *Data:* ${dataFormatada}
-Valor da Reserva: R$ 100,00
+*Valor da Reserva:* R$ 100,00
 
 Este é um envio automático.
       `.trim();
