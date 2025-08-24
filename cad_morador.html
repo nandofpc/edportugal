@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width initial-scale=1">
+  <title>Cadastro de Moradores - Edifício Portugal</title>
+  <!-- jsPDF e AutoTable -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background-color: #f4f6f9;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      max-width: 900px;
+      margin: auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    #topo {
+      height: 6px;
+      background: linear-gradient(90deg, #1a3b5d, #2c5c8a);
+      margin-bottom: 20px;
+      border-radius: 3px;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 25px;
+      border-bottom: 2px solid #eee;
+      padding-bottom: 15px;
+    }
+    .header .brand img {
+      width: 80px;
+      border-radius: 8px;
+    }
+    .header .title h1 {
+      margin: 0;
+      font-size: 1.6em;
+      color: #1a3b5d;
+    }
+    .header .title p {
+      margin: 5px 0 0;
+      color: #555;
+      font-size: 0.95em;
+    }
+    .info-text {
+      background-color: #e7f3ff;
+      border-left: 4px solid #2c5c8a;
+      padding: 12px 15px;
+      margin-bottom: 25px;
+      color: #333;
+      font-size: 0.95em;
+    }
+    .info-text strong {
+      color: #1a3b5d;
+    }
+    .section {
+      margin-bottom: 25px;
+      padding: 18px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background-color: #f9f9fb;
+    }
+    .section h2 {
+      margin-top: 0;
+      font-size: 1.2em;
+      color: #1a3b5d;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 8px;
+    }
+    label {
+      display: block;
+      margin: 12px 0 5px;
+      font-weight: bold;
+      color: #444;
+    }
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    input[type="date"],
+    input[type="number"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      box-sizing: border-box;
+      font-size: 14px;
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: #2c5c8a;
+      box-shadow: 0 0 5px rgba(44, 92, 138, 0.3);
+    }
+    .row {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 10px;
+    }
+    .row > div {
+      flex: 1;
+    }
+    button {
+      background-color: #28a745;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    button:hover {
+      background-color: #218838;
+    }
+    button.remove {
+      background-color: #dc3545;
+      padding: 5px 10px;
+      font-size: 12px;
+    }
+    button.remove:hover {
+      background-color: #c82333;
+    }
+    .dynamic-list {
+      margin-top: 10px;
+    }
+    .dynamic-item {
+      border: 1px solid #ccc;
+      padding: 12px;
+      margin-bottom: 12px;
+      border-radius: 6px;
+      background-color: #fff;
+      position: relative;
+    }
+    .dynamic-item button.remove {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+    }
+    .animal-info {
+      margin-top: 10px;
+      padding: 12px;
+      background-color: #f0f7ff;
+      border: 1px solid #b3daff;
+      border-radius: 6px;
+    }
+    .btn-submit {
+      background-color: #007bff;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+      width: 100%;
+      margin-top: 20px;
+    }
+    .btn-submit:hover {
+      background-color: #0069d9;
+    }
+    #mensagem {
+      margin-top: 20px;
+      padding: 12px;
+      border-radius: 6px;
+      text-align: center;
+      font-weight: bold;
+      display: none;
+    }
+    .success {
+      background-color: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+    .error {
+      background-color: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+  </style>
+</head>
+<body>
+  <div id="topo"></div>
+  <div class="container">
+    <!-- Cabeçalho -->
+    <div class="header">
+      <div class="brand">
+        <img src="assets/logo_edificio_portugal.jpg" alt="Edifício Portugal">
+      </div>
+      <div class="title">
+        <h1>Cadastro de Moradores</h1>
+        <p>Edifício Portugal – Registro de Residentes</p>
+      </div>
+    </div>
+    <!-- Texto informativo -->
+    <div class="info-text">
+      <p><strong>Preencha todos os campos abaixo para cadastrar um novo morador.</strong></p>
+      <p><strong>Em caso de dúvidas, entre em contato com a administração.</strong></p>
+    </div>
+    <!-- Formulário -->
+    <main>
+      <section class="card">
+        <form id="moradorForm">
+          <!-- Dados Pessoais -->
+          <div class="section">
+            <h2>Dados Pessoais</h2>
+            <label>Nome completo</label>
+            <input type="text" name="nome_morador" required />
+            <div class="row">
+              <div>
+                <label>CPF</label>
+                <input type="text" name="cpf_morador" placeholder="000.000.000-00" required />
+              </div>
+              <div>
+                <label>RG</label>
+                <input type="text" name="rg_morador" placeholder="00.000.000-0" />
+              </div>
+              <div>
+                <label>Data de nascimento</label>
+                <input type="date" name="nascimento_morador" required />
+              </div>
+            </div>
+            <div class="row">
+              <div>
+                <label>Nº do apartamento</label>
+                <select name="apartamento" required>
+                  <option value="">Selecione o apartamento</option>
+                  <option value="11">11</option>
+                  <option value="12">12</option>
+                  <option value="13">13</option>
+                  <option value="14">14</option>
+                  <option value="21">21</option>
+                  <option value="22">22</option>
+                  <option value="23">23</option>
+                  <option value="24">24</option>
+                  <option value="31">31</option>
+                  <option value="32">32</option>
+                  <option value="33">33</option>
+                  <option value="34">34</option>
+                  <option value="41">41</option>
+                  <option value="42">42</option>
+                  <option value="43">43</option>
+                  <option value="44">44</option>
+                  <option value="51">51</option>
+                  <option value="52">52</option>
+                  <option value="53">53</option>
+                  <option value="54">54</option>
+                  <option value="61">61</option>
+                  <option value="62">62</option>
+                  <option value="63">63</option>
+                  <option value="64">64</option>
+                  <option value="71">71</option>
+                  <option value="72">72</option>
+                  <option value="73">73</option>
+                  <option value="74">74</option>
+                  <option value="81">81</option>
+                  <option value="82">82</option>
+                  <option value="83">83</option>
+                  <option value="84">84</option>
+                  <option value="91">91</option>
+                  <option value="92">92</option>
+                  <option value="93">93</option>
+                  <option value="94">94</option>
+                  <option value="101">101</option>
+                  <option value="102">102</option>
+                  <option value="103">103</option>
+                  <option value="104">104</option>
+                </select>
+              </div>
+              <div>
+                <label>Estado civil</label>
+                <select name="estado_civil" required>
+                  <option value="">Selecione</option>
+                  <option value="Solteiro(a)">Solteiro(a)</option>
+                  <option value="Casado(a)">Casado(a)</option>
+                  <option value="Divorciado(a)">Divorciado(a)</option>
+                  <option value="Viúvo(a)">Viúvo(a)</option>
+                  <option value="Separado(a)">Separado(a)</option>
+                  <option value="União Estável">União Estável</option>
+                </select>
+              </div>
+              <div>
+                <label>Profissão</label>
+                <input type="text" name="profissao" required />
+              </div>
+            </div>
+            <div class="row">
+              <div>
+                <label>Celular</label>
+                <input type="tel" name="celular" placeholder="(11) 99999-9999" required />
+              </div>
+              <div>
+                <label>Telefone fixo</label>
+                <input type="tel" name="telefone_fixo" placeholder="(11) 3333-3333" />
+              </div>
+              <div>
+                <label>Email</label>
+                <input type="email" name="email" required />
+              </div>
+            </div>
+          </div>
+          
+          <!-- Convênio Médico -->
+          <div class="section">
+            <h2>Convênio Médico</h2>
+            <label>Convênio médico (obrigatório)</label>
+            <input type="text" name="convenio_medico" placeholder="Nome do convênio médico" required />
+          </div>
+
+          <!-- Veículo -->
+          <div class="section">
+            <h2>Veículo(s)</h2>
+            <div id="veiculos-list" class="dynamic-list"></div>
+            <button type="button" onclick="addVeiculo()">+ Adicionar Veículo</button>
+          </div>
+          
+          <!-- Contato de Emergência -->
+          <div class="section">
+            <h2>Contato de Emergência</h2>
+            <p style="font-size: 0.9em; color: #666; margin-bottom: 10px;">É obrigatório informar pelo menos um contato de emergência.</p>
+            <div id="contatos-emergencia-list" class="dynamic-list"></div>
+            <button type="button" onclick="addContatoEmergencia()">+ Adicionar Contato de Emergência</button>
+          </div>
+
+          <!-- Outros Moradores da Unidade -->
+          <div class="section">
+            <h2>Outros Moradores da Unidade</h2>
+            <p style="font-size: 0.9em; color: #666; margin-bottom: 10px;">Moradores que residem no mesmo apartamento.</p>
+            <div id="moradores-list" class="dynamic-list"></div>
+            <button type="button" onclick="addMorador()">+ Adicionar Morador</button>
+          </div>
+          
+          <!-- Funcionários Domésticos -->
+          <div class="section">
+            <h2>Funcionários Domésticos</h2>
+            <div id="funcionarios-list" class="dynamic-list"></div>
+            <button type="button" onclick="addFuncionario()">+ Adicionar Funcionário</button>
+          </div>
+          
+          <!-- Outras Informações -->
+          <div class="section">
+            <h2>Outras Informações</h2>
+            <div class="row">
+              <div>
+                <label>Nº de Bicicletas</label>
+                <input type="number" name="bicicletas" min="0" value="0" />
+              </div>
+              <div>
+                <label>Nº de Motocicletas</label>
+                <input type="number" name="motos" min="0" value="0" />
+              </div>
+            </div>
+            <label>Possui Animais Domésticos?</label>
+            <div style="margin: 8px 0;">
+              <label><input type="radio" name="animais" value="Sim" onchange="toggleAnimais()"> Sim</label>
+              <label><input type="radio" name="animais" value="Não" onchange="toggleAnimais()"> Não</label>
+            </div>
+            <div id="animais-info" class="animal-info" style="display: none;">
+              <div id="animais-list"></div>
+              <button type="button" onclick="addAnimal()">+ Adicionar Animal</button>
+            </div>
+            
+            <label>Observações gerais</label>
+            <textarea name="observacoes" rows="3" placeholder="Informações adicionais sobre o morador..."></textarea>
+          </div>
+          
+          <!-- Botão de envio -->
+          <button type="submit" class="btn-submit">Salvar em PDF</button>
+        </form>
+        
+        <!-- Mensagem de resultado -->
+        <div id="mensagem"></div>
+      </section>
+    </main>
+  </div>
+  
+  <script>
+    // Máscara para CPF
+    const cpfInput = document.querySelector('input[name="cpf_morador"]');
+    if (cpfInput) {
+      cpfInput.addEventListener('input', function(e) {
+        let v = e.target.value.replace(/\D/g, '');
+        if (v.length > 11) v = v.slice(0, 11);
+        let out = v;
+        if (v.length > 3) out = v.slice(0,3) + '.' + out.slice(3);
+        if (v.length > 6) out = out.slice(0,7) + '.' + out.slice(7);
+        if (v.length > 9) out = out.slice(0,11) + '-' + out.slice(11);
+        e.target.value = out;
+      });
+      cpfInput.addEventListener('blur', function(e) {
+        const cpf = e.target.value.replace(/\D/g, '');
+        if (cpf && !validaCPF(cpf)) {
+          e.target.setCustomValidity('CPF inválido!');
+          e.target.reportValidity();
+        } else {
+          e.target.setCustomValidity('');
+        }
+      });
+    }
+    
+    // Máscara para RG
+    const rgInput = document.querySelector('input[name="rg_morador"]');
+    if (rgInput) {
+      rgInput.addEventListener('input', function(e) {
+        let v = e.target.value.replace(/\D/g, '');
+        if (v.length > 9) v = v.slice(0, 9);
+        let out = v;
+        if (v.length > 2) out = v.slice(0,2) + '.' + out.slice(2);
+        if (v.length > 5) out = out.slice(0,6) + '.' + out.slice(6);
+        if (v.length > 8) out = out.slice(0,10) + '-' + out.slice(10);
+        e.target.value = out;
+      });
+    }
+    
+    // Função de validação de CPF
+    function validaCPF(cpf) {
+      if (cpf.length !== 11 || /^([0-9])\1+$/.test(cpf)) return false;
+      let soma = 0, resto;
+      for (let i = 1; i <= 9; i++) soma += parseInt(cpf.substring(i-1, i)) * (11 - i);
+      resto = (soma * 10) % 11;
+      if ((resto === 10) || (resto === 11)) resto = 0;
+      if (resto !== parseInt(cpf.substring(9, 10))) return false;
+      soma = 0;
+      for (let i = 1; i <= 10; i++) soma += parseInt(cpf.substring(i-1, i)) * (12 - i);
+      resto = (soma * 10) % 11;
+      if ((resto === 10) || (resto === 11)) resto = 0;
+      if (resto !== parseInt(cpf.substring(10, 11))) return false;
+      return true;
+    }
+    
+    // Máscara para celular
+    const celularInput = document.querySelector('input[name="celular"]');
+    if (celularInput) {
+      celularInput.addEventListener('input', function(e) {
+        let v = e.target.value.replace(/\D/g, '');
+        // DDD (2) + 9 dígitos (9)
+        if (v.length > 11) v = v.slice(0, 11);
+        let out = v;
+        if (v.length > 0) out = '(' + v.slice(0,2) + ')';
+        if (v.length > 2) out += ' ' + v.slice(2,7);
+        if (v.length > 7) out += '-' + v.slice(7,11);
+        e.target.value = out;
+      });
+      celularInput.addEventListener('blur', function(e) {
+        let v = e.target.value.replace(/\D/g, '');
+        if (v.length !== 11) {
+          e.target.setCustomValidity('O celular deve conter 9 dígitos além do DDD.');
+          e.target.reportValidity();
+        } else {
+          e.target.setCustomValidity('');
+        }
+      });
+    }
+    
+    // Máscara para telefone fixo
+    const telFixoInput = document.querySelector('input[name="telefone_fixo"]');
+    if (telFixoInput) {
+      telFixoInput.addEventListener('input', function(e) {
+        let v = e.target.value.replace(/\D/g, '');
+        // DDD (2) + 8 dígitos
+        if (v.length > 10) v = v.slice(0, 10);
+        let out = v;
+        if (v.length > 0) out = '(' + v.slice(0,2) + ')';
+        if (v.length > 2) out += ' ' + v.slice(2,6);
+        if (v.length > 6) out += '-' + v.slice(6,10);
+        e.target.value = out;
+      });
+    }
+    
+    // Contadores globais
+    let veiculoCount = 0;
+    let moradorCount = 0;
+    let funcionarioCount = 0;
+    let contatoEmergenciaCount = 0;
+    
+    // Adicionar Veículo
+    function addVeiculo() {
+      const container = document.getElementById('veiculos-list');
+      const div = document.createElement('div');
+      div.className = 'dynamic-item';
+      div.innerHTML = `
+        <button type="button" class="remove" onclick="this.parentElement.remove()">X</button>
+        <div class="row">
+          <div>
+            <label>Marca</label>
+            <input type="text" name="veiculo_marca_${veiculoCount}" required />
+          </div>
+          <div>
+            <label>Modelo</label>
+            <input type="text" name="veiculo_modelo_${veiculoCount}" required />
+          </div>
+          <div>
+            <label>Ano</label>
+            <input type="number" name="veiculo_ano_${veiculoCount}" min="1900" max="2030" />
+          </div>
+        </div>
+        <div class="row">
+          <div>
+            <label>Cor</label>
+            <input type="text" name="veiculo_cor_${veiculoCount}" required />
+          </div>
+          <div>
+            <label>Placa</label>
+            <input type="text" name="veiculo_placa_${veiculoCount}" placeholder="ABC-1234" required />
+          </div>
+          <div>
+            <label>Nº da vaga</label>
+            <input type="text" name="veiculo_vaga_${veiculoCount}" required />
+          </div>
+        </div>
+      `;
+      container.appendChild(div);
+      veiculoCount++;
+    }
+    
+    // Adicionar Contato de Emergência
+    function addContatoEmergencia() {
+      const container = document.getElementById('contatos-emergencia-list');
+      const div = document.createElement('div');
+      div.className = 'dynamic-item';
+      div.innerHTML = `
+        <button type="button" class="remove" onclick="this.parentElement.remove()">X</button>
+        <div class="row">
+          <div>
+            <label>Nome</label>
+            <input type="text" name="contato_nome_${contatoEmergenciaCount}" required />
+          </div>
+          <div>
+            <label>Grau de parentesco</label>
+            <input type="text" name="contato_parentesco_${contatoEmergenciaCount}" required />
+          </div>
+          <div>
+            <label>Celular</label>
+            <input type="tel" name="contato_celular_${contatoEmergenciaCount}" placeholder="(11) 99999-9999" required />
+          </div>
+        </div>
+      `;
+      container.appendChild(div);
+      
+      // Adicionar máscara para o campo de celular do contato de emergência
+      const novoCelular = div.querySelector(`input[name="contato_celular_${contatoEmergenciaCount}"]`);
+      novoCelular.addEventListener('input', function(e) {
+        let v = e.target.value.replace(/\D/g, '');
+        if (v.length > 11) v = v.slice(0, 11);
+        let out = v;
+        if (v.length > 0) out = '(' + v.slice(0,2) + ')';
+        if (v.length > 2) out += ' ' + v.slice(2,7);
+        if (v.length > 7) out += '-' + v.slice(7,11);
+        e.target.value = out;
+      });
+      
+      contatoEmergenciaCount++;
+    }
+    
+    // Adicionar Morador
+    function addMorador() {
+      const container = document.getElementById('moradores-list');
+      const div = document.createElement('div');
+      div.className = 'dynamic-item';
+      div.innerHTML = `
+        <button type="button" class="remove" onclick="this.parentElement.remove()">X</button>
+        <div class="row">
+          <div>
+            <label>Nome</label>
+            <input type="text" name="morador_nome_${moradorCount}" required />
+          </div>
+          <div>
+            <label>Parentesco</label>
+            <input type="text" name="morador_parentesco_${moradorCount}" required />
+          </div>
+          <div>
+            <label>Data de Nascimento</label>
+            <input type="date" name="morador_nasc_${moradorCount}" required />
+          </div>
+        </div>
+      `;
+      container.appendChild(div);
+      moradorCount++;
+    }
+    
+    // Adicionar Funcionário
+    function addFuncionario() {
+      const container = document.getElementById('funcionarios-list');
+      const div = document.createElement('div');
+      div.className = 'dynamic-item';
+      div.innerHTML = `
+        <button type="button" class="remove" onclick="this.parentElement.remove()">X</button>
+        <div class="row">
+          <div>
+            <label>Nome</label>
+            <input type="text" name="funcionario_nome_${funcionarioCount}" required />
+          </div>
+          <div>
+            <label>Função</label>
+            <input type="text" name="funcionario_funcao_${funcionarioCount}" required />
+          </div>
+          <div>
+            <label>CPF</label>
+            <input type="text" name="funcionario_doc_${funcionarioCount}" placeholder="000.000.000-00" required />
+          </div>
+        </div>
+        <div class="row">
+          <div>
+            <label>Telefone</label>
+            <input type="tel" name="funcionario_tel_${funcionarioCount}" placeholder="(11) 99999-9999" required />
+          </div>
+          <div>
+            <label>Dias de trabalho</label>
+            <input type="text" name="funcionario_dias_${funcionarioCount}" placeholder="Ex: Seg, Qua, Sex" required />
+          </div>
+          <div>
+            <label>Horário</label>
+            <input type="text" name="funcionario_horario_${funcionarioCount}" placeholder="Ex: 8h às 17h" required />
+          </div>
+        </div>
+      `;
+      container.appendChild(div);
+      
+      // Adicionar máscara para o campo de telefone do funcionário
+      const novoTel = div.querySelector(`input[name="funcionario_tel_${funcionarioCount}"]`);
+      novoTel.addEventListener('input', function(e) {
+        let v = e.target.value.replace(/\D/g, '');
+        if (v.length > 11) v = v.slice(0, 11);
+        let out = v;
+        if (v.length > 0) out = '(' + v.slice(0,2) + ')';
+        if (v.length > 2) out += ' ' + v.slice(2,7);
+        if (v.length > 7) out += '-' + v.slice(7,11);
+        e.target.value = out;
+      });
+      
+      funcionarioCount++;
+    }
+    
+    // Mostrar/ocultar campo de animais
+    window.animalCount = 0;
+    window.addAnimal = function addAnimal() {
+      const container = document.getElementById('animais-list');
+      const div = document.createElement('div');
+      div.className = 'dynamic-item';
+      div.style.marginBottom = '10px';
+      div.innerHTML = `
+        <button type="button" class="remove" onclick="this.parentElement.remove()">X</button>
+        <div class="row">
+          <div>
+            <label>Nome</label>
+            <input type="text" name="animal_nome_${window.animalCount}" placeholder="Nome do animal" required />
+          </div>
+          <div>
+            <label>Tipo</label>
+            <select name="animal_tipo_${window.animalCount}" required>
+              <option value="">Selecione</option>
+              <option value="Gato">Gato</option>
+              <option value="Cachorro">Cachorro</option>
+              <option value="Pássaro">Pássaro</option>
+              <option value="Roedor">Roedor</option>
+              <option value="Réptil">Réptil</option>
+              <option value="Outros">Outros</option>
+            </select>
+          </div>
+          <div>
+            <label>Raça</label>
+            <input type="text" name="animal_raca_${window.animalCount}" placeholder="Raça" />
+          </div>
+        </div>
+        <div class="row">
+          <div>
+            <label>Cor</label>
+            <input type="text" name="animal_cor_${window.animalCount}" placeholder="Cor" />
+          </div>
+          <div>
+            <label>Peso (kg)</label>
+            <input type="number" name="animal_peso_${window.animalCount}" step="0.1" placeholder="Peso em kg" />
+          </div>
+          <div>
+            <label>Vacinas em dia?</label>
+            <select name="animal_vacinas_${window.animalCount}">
+              <option value="Sim">Sim</option>
+              <option value="Não">Não</option>
+            </select>
+          </div>
+        </div>
+      `;
+      container.appendChild(div);
+      window.animalCount++;
+    }
+    
+    function toggleAnimais() {
+      const selected = document.querySelector('input[name="animais"]:checked')?.value;
+      document.getElementById('animais-info').style.display = selected === 'Sim' ? 'block' : 'none';
+      // Limpa lista se marcar Não
+      if(selected !== 'Sim') {
+        document.getElementById('animais-list').innerHTML = '';
+        window.animalCount = 0;
+      } else if(document.getElementById('animais-list').children.length === 0) {
+        addAnimal();
+      }
+    }
+    
+    // Gerar PDF
+    const formEl = document.getElementById('moradorForm');
+    formEl.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      const formData = new FormData(this);
+      const data = {};
+      for (let [key, value] of formData.entries()) {
+        data[key] = value;
+      }
+      
+      // Validar convênio médico
+      if (!data.convenio_medico || data.convenio_medico.trim() === '') {
+        alert('O campo de convênio médico é obrigatório.');
+        document.querySelector('input[name="convenio_medico"]').focus();
+        return;
+      }
+      
+      // Validar contato de emergência
+      const contatosEmergencia = [];
+      for(let i=0; i<contatoEmergenciaCount; i++) {
+        const nome = data[`contato_nome_${i}`];
+        const parentesco = data[`contato_parentesco_${i}`];
+        const celular = data[`contato_celular_${i}`];
+        if(nome && parentesco && celular) {
+          contatosEmergencia.push([nome, parentesco, celular]);
+        }
+      }
+      
+      if (contatosEmergencia.length === 0) {
+        alert('É obrigatório informar pelo menos um contato de emergência.');
+        addContatoEmergencia();
+        return;
+      }
+      
+      // Animais: montar lista
+      const animais = [];
+      for(let i=0; i<window.animalCount; i++) {
+        const nome = data[`animal_nome_${i}`];
+        const tipo = data[`animal_tipo_${i}`];
+        const raca = data[`animal_raca_${i}`];
+        const cor = data[`animal_cor_${i}`];
+        const peso = data[`animal_peso_${i}`];
+        const vacinas = data[`animal_vacinas_${i}`];
+        if(nome && tipo) {
+          animais.push([nome, tipo, raca||'-', cor||'-', peso||'-', vacinas||'-']);
+        }
+      }
+      
+      // Veículos: montar lista
+      const veiculos = [];
+      for(let i=0; i<veiculoCount; i++) {
+        const marca = data[`veiculo_marca_${i}`];
+        const modelo = data[`veiculo_modelo_${i}`];
+        const ano = data[`veiculo_ano_${i}`];
+        const cor = data[`veiculo_cor_${i}`];
+        const placa = data[`veiculo_placa_${i}`];
+        const vaga = data[`veiculo_vaga_${i}`];
+        if(marca && modelo && placa && vaga) {
+          veiculos.push([marca, modelo, ano||'-', cor||'-', placa, vaga]);
+        }
+      }
+      
+      // Cabeçalho visual
+      doc.setFillColor(26, 59, 93);
+      doc.rect(0, 0, 210, 28, 'F');
+      doc.setTextColor(255,255,255);
+      doc.setFontSize(20);
+      doc.text('Cadastro de Morador', 105, 15, {align:'center'});
+      doc.setFontSize(12);
+      doc.text('Edifício Portugal', 105, 23, {align:'center'});
+      doc.setTextColor(0,0,0);
+      let y = 36;
+      
+      // Bloco: Dados Pessoais
+      doc.setFontSize(14);
+      doc.setDrawColor(44,92,138);
+      doc.setFillColor(231,243,255);
+      doc.rect(14, y-7, 182, 10, 'F');
+      doc.text('Dados Pessoais', 16, y);
+      y += 8;
+      doc.setFontSize(11);
+      doc.autoTable({
+        startY: y,
+        head: [['Campo', 'Valor']],
+        body: [
+          ['Nome', data.nome_morador],
+          ['CPF', data.cpf_morador],
+          ['RG', data.rg_morador || 'Não informado'],
+          ['Nascimento', formatDate(data.nascimento_morador)],
+          ['Estado civil', data.estado_civil],
+          ['Profissão', data.profissao],
+          ['Apartamento', data.apartamento],
+          ['Celular', data.celular],
+          ['Telefone fixo', data.telefone_fixo || 'Não informado'],
+          ['Email', data.email]
+        ],
+        theme: 'grid',
+        styles: {fontSize:10},
+        margin: {left:14, right:14},
+        headStyles: {fillColor: [44,92,138]},
+      });
+      y = doc.lastAutoTable.finalY + 14; // Espaço extra
+      
+      // Bloco: Convênio Médico
+      doc.setFontSize(14);
+      doc.setFillColor(231,243,255);
+      doc.rect(14, y-7, 182, 10, 'F');
+      doc.text('Convênio Médico', 16, y);
+      y += 8;
+      doc.setFontSize(11);
+      doc.autoTable({
+        startY: y,
+        head: [['Campo', 'Valor']],
+        body: [
+          ['Convênio Médico', data.convenio_medico]
+        ],
+        theme: 'grid',
+        styles: {fontSize:10},
+        margin: {left:14, right:14},
+        headStyles: {fillColor: [44,92,138]},
+      });
+      y = doc.lastAutoTable.finalY + 14; // Espaço extra
+      
+      // Bloco: Veículos
+      if (veiculos.length > 0) {
+        doc.setFontSize(14);
+        doc.setFillColor(231,243,255);
+        doc.rect(14, y-7, 182, 10, 'F');
+        doc.text('Veículos', 16, y);
+        y += 8;
+        doc.autoTable({
+          startY: y,
+          head: [['Marca', 'Modelo', 'Ano', 'Cor', 'Placa', 'Vaga']],
+          body: veiculos,
+          theme: 'grid',
+          styles: {fontSize:10},
+          margin: {left:14, right:14},
+          headStyles: {fillColor: [44,92,138]},
+        });
+        y = doc.lastAutoTable.finalY + 14;
+      }
+      
+      // Bloco: Contatos de Emergência
+      if (contatosEmergencia.length > 0) {
+        doc.setFontSize(14);
+        doc.setFillColor(231,243,255);
+        doc.rect(14, y-7, 182, 10, 'F');
+        doc.text('Contatos de Emergência', 16, y);
+        y += 8;
+        doc.autoTable({
+          startY: y,
+          head: [['Nome', 'Parentesco', 'Celular']],
+          body: contatosEmergencia,
+          theme: 'grid',
+          styles: {fontSize:10},
+          margin: {left:14, right:14},
+          headStyles: {fillColor: [44,92,138]},
+        });
+        y = doc.lastAutoTable.finalY + 14; // Espaço extra
+      }
+      
+      // Bloco: Outros Moradores da Unidade
+      const moradores = [];
+      for (let i = 0; i < moradorCount; i++) {
+        const nome = data[`morador_nome_${i}`];
+        const parentesco = data[`morador_parentesco_${i}`];
+        const nasc = formatDate(data[`morador_nasc_${i}`]);
+        if (nome && parentesco && nasc) {
+          moradores.push([nome, parentesco, nasc]);
+        }
+      }
+      if (moradores.length > 0) {
+        doc.setFontSize(14);
+        doc.setFillColor(231,243,255);
+        doc.rect(14, y-7, 182, 10, 'F');
+        doc.text('Outros Moradores da Unidade', 16, y);
+        y += 8;
+        doc.autoTable({
+          startY: y,
+          head: [['Nome', 'Parentesco', 'Nascimento']],
+          body: moradores,
+          theme: 'grid',
+          styles: {fontSize:10},
+          margin: {left:14, right:14},
+          headStyles: {fillColor: [44,92,138]},
+        });
+        y = doc.lastAutoTable.finalY + 14; // Espaço extra
+      }
+      
+      // Bloco: Funcionários Domésticos
+      const funcionarios = [];
+      for (let i = 0; i < funcionarioCount; i++) {
+        const nome = data[`funcionario_nome_${i}`];
+        const funcao = data[`funcionario_funcao_${i}`];
+        const docFunc = data[`funcionario_doc_${i}`];
+        const tel = data[`funcionario_tel_${i}`];
+        const dias = data[`funcionario_dias_${i}`];
+        const horario = data[`funcionario_horario_${i}`];
+        if (nome && funcao && docFunc && tel && dias && horario) {
+          funcionarios.push([nome, funcao, docFunc, tel, dias, horario]);
+        }
+      }
+      if (funcionarios.length > 0) {
+        doc.setFontSize(14);
+        doc.setFillColor(231,243,255);
+        doc.rect(14, y-7, 182, 10, 'F');
+        doc.text('Funcionários Domésticos', 16, y);
+        y += 8;
+        doc.autoTable({
+          startY: y,
+          head: [['Nome', 'Função', 'CPF', 'Telefone', 'Dias', 'Horário']],
+          body: funcionarios,
+          theme: 'grid',
+          styles: {fontSize:10},
+          margin: {left:14, right:14},
+          headStyles: {fillColor: [44,92,138]},
+        });
+        y = doc.lastAutoTable.finalY + 14; // Espaço extra
+      }
+      
+      // Bloco: Outras Informações
+      doc.setFontSize(14);
+      doc.setFillColor(231,243,255);
+      doc.rect(14, y-7, 182, 10, 'F');
+      doc.text('Outras Informações', 16, y);
+      y += 8;
+      doc.setFontSize(11);
+      doc.autoTable({
+        startY: y,
+        head: [['Campo', 'Valor']],
+        body: [
+          ['Bicicletas', data.bicicletas || 0],
+          ['Motocicletas', data.motos || 0],
+          ['Animais', data.animais || 'Não']
+        ],
+        theme: 'grid',
+        styles: {fontSize:10},
+        margin: {left:14, right:14},
+        headStyles: {fillColor: [44,92,138]},
+      });
+      y = doc.lastAutoTable.finalY + 4;
+      if(data.animais === 'Sim' && animais.length > 0) {
+        doc.autoTable({
+          startY: y,
+          head: [['Nome', 'Tipo', 'Raça', 'Cor', 'Peso (kg)', 'Vacinas']],
+          body: animais,
+          theme: 'grid',
+          styles: {fontSize:10},
+          margin: {left:14, right:14},
+          headStyles: {fillColor: [44,92,138]},
+        });
+        y = doc.lastAutoTable.finalY + 10;
+      }
+      
+      // Observações
+      if (data.observacoes && data.observacoes.trim() !== '') {
+        doc.setFontSize(14);
+        doc.setFillColor(231,243,255);
+        doc.rect(14, y-7, 182, 10, 'F');
+        doc.text('Observações', 16, y);
+        y += 8;
+        doc.setFontSize(11);
+        doc.text(data.observacoes, 16, y);
+        y += 10 + Math.ceil(data.observacoes.length / 100) * 5; // Ajuste de altura baseado no comprimento do texto
+      }
+      
+      // Rodapé
+      doc.setFontSize(10);
+      doc.setTextColor(120,120,120);
+      doc.text('Gerado em ' + formatDate(new Date().toISOString().slice(0,10)), 14, 285);
+      doc.text('Cadastro de Morador - Edifício Portugal', 105, 285, {align: 'center'});
+      doc.text('Página 1', 196, 285, {align: 'right'});
+      doc.setTextColor(0,0,0);
+      
+      // Salvar PDF
+      const fileName = `Cadastro_Morador_${data.apartamento}_${data.nome_morador.split(' ')[0]}.pdf`;
+      doc.save(fileName);
+      
+      // Mensagem de sucesso
+      const mensagem = document.getElementById('mensagem');
+      mensagem.innerHTML = `✅ Cadastro salvo como "${fileName}".<br>O PDF foi gerado com todas as informações do morador.`;
+      mensagem.className = 'success';
+      mensagem.style.display = 'block';
+    });
+    
+    // Função auxiliar: formatar data
+    function formatDate(dateStr) {
+      if (!dateStr) return '';
+      const [year, month, day] = dateStr.split('-');
+      return `${day}/${month}/${year}`;
+    }
+    
+    // Adicionar um contato de emergência inicial automaticamente
+    document.addEventListener('DOMContentLoaded', function() {
+      addContatoEmergencia();
+    });
+  </script>
+</body>
+</html>
