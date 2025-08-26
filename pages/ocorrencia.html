@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Relatar Ocorrência - Edifício Portugal</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div id="topo"></div>
+  <div class="container">
+
+    <!-- Cabeçalho com número da ocorrência -->
+    <div class="header">
+      <div class="brand">
+        <img src="../assets/logo_edificio_portugal.jpg" alt="Edifício Portugal">
+      </div>
+      <div class="title">
+        <h1>Relatar Ocorrência</h1>
+        <p>Edifício Portugal – Registro de Ocorrências</p>
+      </div>
+      <div class="info">
+        <strong>Nº da Ocorrência:</strong><br>
+        <span id="numeroOcorrencia" class="num-ocorrencia">Carregando...</span>
+      </div>
+    </div>
+
+    <!-- Texto informativo -->
+    <div class="info-text">
+      <p><strong>Use este formulário para relatar qualquer ocorrência no condomínio.</strong></p>
+      <p><strong>Após preencher, será gerado um PDF com todos os dados e o número da ocorrência.</strong></p>
+    </div>
+
+    <!-- Formulário -->
+    <main>
+      <section class="card">
+        <form id="ocorrenciaForm">
+
+          <div class="section">
+            <h2>Dados do Morador</h2>
+            <label>Nome do Morador</label>
+            <input type="text" name="nome_morador" required />
+
+            <label>Nº do Apartamento</label>
+            <select name="apartamento" required>
+              <option value="">Selecione o apartamento</option>
+              <option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option>
+              <option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option>
+              <option value="31">31</option><option value="32">32</option><option value="33">33</option><option value="34">34</option>
+              <option value="41">41</option><option value="42">42</option><option value="43">43</option><option value="44">44</option>
+              <option value="51">51</option><option value="52">52</option><option value="53">53</option><option value="54">54</option>
+              <option value="61">61</option><option value="62">62</option><option value="63">63</option><option value="64">64</option>
+              <option value="71">71</option><option value="72">72</option><option value="73">73</option><option value="74">74</option>
+              <option value="81">81</option><option value="82">82</option><option value="83">83</option><option value="84">84</option>
+              <option value="91">91</option><option value="92">92</option><option value="93">93</option><option value="94">94</option>
+              <option value="101">101</option><option value="102">102</option><option value="103">103</option><option value="104">104</option>
+            </select>
+
+            <div class="row">
+              <div>
+                <label>Data</label>
+                <input type="date" name="data" id="data" required readonly />
+              </div>
+              <div>
+                <label>Hora</label>
+                <input type="time" name="hora" id="hora" required readonly />
+              </div>
+            </div>
+          </div>
+
+          <div class="section">
+            <h2>Descrição da Ocorrência</h2>
+            <label>Descreva a ocorrência</label>
+            <textarea name="descricao" required placeholder="Descreva com clareza e detalhes o que aconteceu..."></textarea>
+          </div>
+
+          <!-- Botão de envio -->
+          <button type="submit" class="btn btn-success">Gerar PDF da Ocorrência</button>
+        </form>
+
+        <!-- Mensagem de resultado -->
+        <div id="mensagem"></div>
+      </section>
+    </main>
+  </div>
+
+  <script src="pages/js/script.js"></script>
+  <script>
+    // Gera número de ocorrência no formato YYYYMMDDHHMM
+    function gerarNumeroOcorrencia() {
+      const now = new Date();
+      const pad = (n) => n.toString().padStart(2, '0');
+      const ano = now.getFullYear();
+      const mes = pad(now.getMonth() + 1);
+      const dia = pad(now.getDate());
+      const hora = pad(now.getHours());
+      const minuto = pad(now.getMinutes());
+      return `${ano}${mes}${dia}${hora}${minuto}`;
+    }
+
+    // Preenche o número da ocorrência no cabeçalho
+    const numeroOcorrencia = gerarNumeroOcorrencia();
+    document.getElementById('numeroOcorrencia').textContent = numeroOcorrencia;
+
+    // Preencher data e hora automaticamente
+    function pad(n) {
+      return n < 10 ? '0' + n : n;
+    }
+
+    function setDateTimeNow() {
+      const now = new Date();
+      document.getElementById('data').value = now.getFullYear() + '-' + pad(now.getMonth() + 1) + '-' + pad(now.getDate());
+      document.getElementById('hora').value = pad(now.getHours()) + ':' + pad(now.getMinutes());
+    }
+
+    // Define data/hora ao carregar
+    setDateTimeNow();
+
+    // Atualiza a cada minuto
+    setInterval(setDateTimeNow, 60000);
+
+    // Geração do PDF
+    document.getElementById('ocorrenciaForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      // Verificar se jsPDF está disponível
+      if (!window.jspdf) {
+        alert('Erro ao carregar biblioteca necessária. Por favor, tente novamente.');
+        return;
+      }
+      
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      const formData = new FormData(this);
+      const nome = formData.get('nome_morador');
+      const apto = formData.get('apartamento');
+      const data = formData.get('data');
+      const hora = formData.get('hora');
+      const desc = formData.get('descricao');
+
+      // Logo e título
+      const img = new Image();
+      img.src = "assets/logo_edificio_portugal.jpg";
+      img.onload = function () {
+        doc.addImage(img, 'JPEG', 14, 20, 30, 20);
+        doc.setFontSize(18);
+        doc.text("EDIFÍCIO PORTUGAL", 50, 30);
+        doc.setFontSize(14);
+        doc.text("Relato de Ocorrência", 105, 50, { align: 'center' });
+
+        // Número da ocorrência
+        doc.setFontSize(12);
+        doc.setFont('helvetica', 'bold');
+        doc.text(`Nº DA OCORRÊNCIA: ${numeroOcorrencia}`, 105, 65, { align: 'center' });
+        doc.setFont('helvetica', 'normal');
+
+        // Dados do relato
+        doc.setFontSize(12);
+        doc.text("Dados do Relato", 14, 80);
+        doc.autoTable({
+          startY: 85,
+          head: [['Campo', 'Valor']],
+          body: [
+            ['Nome do Morador', nome],
+            ['Apartamento', apto],
+            ['Data', formatDate(data)],
+            ['Hora', hora]
+          ],
+          theme: 'grid',
+          styles: { fontSize: 10 },
+          columnStyles: { 0: { cellWidth: 50 }, 1: { cellWidth: 120 } },
+          margin: { left: 14, right: 14 }
+        });
+
+        let y = doc.lastAutoTable.finalY + 10;
+        doc.text("Descrição da Ocorrência", 14, y);
+        y += 8;
+        doc.setFontSize(11);
+        doc.text(doc.splitTextToSize(desc, 180), 14, y);
+
+        // Salvar PDF
+        const fileName = `Ocorrencia_${numeroOcorrencia}_Apto${apto}.pdf`;
+        doc.save(fileName);
+
+        // Mensagem de sucesso
+        const mensagem = document.getElementById('mensagem');
+        mensagem.innerHTML = `<div class="success">✅ Ocorrência #${numeroOcorrencia} registrada!<br>Arquivo "${fileName}" gerado com sucesso.</div>`;
+        mensagem.style.display = 'block';
+      };
+
+      img.onerror = function () {
+        // Sem logo
+        doc.setFontSize(18);
+        doc.text("EDIFÍCIO PORTUGAL", 105, 30, { align: 'center' });
+        doc.setFontSize(14);
+        doc.text("Relato de Ocorrência", 105, 50, { align: 'center' });
+
+        doc.setFontSize(12);
+        doc.setFont('helvetica', 'bold');
+        doc.text(`Nº DA OCORRÊNCIA: ${numeroOcorrencia}`, 105, 65, { align: 'center' });
+        doc.setFont('helvetica', 'normal');
+
+        doc.setFontSize(12);
+        doc.text("Dados do Relato", 14, 80);
+        doc.autoTable({
+          startY: 85,
+          head: [['Campo', 'Valor']],
+          body: [
+            ['Nome do Morador', nome],
+            ['Apartamento', apto],
+            ['Data', formatDate(data)],
+            ['Hora', hora]
+          ],
+          theme: 'grid',
+          styles: { fontSize: 10 },
+          columnStyles: { 0: { cellWidth: 50 }, 1: { cellWidth: 120 } },
+          margin: { left: 14, right: 14 }
+        });
+
+        let y = doc.lastAutoTable.finalY + 10;
+        doc.text("Descrição da Ocorrência", 14, y);
+        y += 8;
+        doc.setFontSize(11);
+        doc.text(doc.splitTextToSize(desc, 180), 14, y);
+
+        const fileName = `Ocorrencia_${numeroOcorrencia}_Apto${apto}.pdf`;
+        doc.save(fileName);
+
+        const mensagem = document.getElementById('mensagem');
+        mensagem.innerHTML = `<div class="success">✅ Ocorrência #${numeroOcorrencia} registrada!<br>Arquivo "${fileName}" gerado com sucesso.</div>`;
+        mensagem.style.display = 'block';
+      };
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Edifício Portugal - Sorteio de Vagas</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <style>
+    .result-container {
+      margin: 20px 0;
+      padding: 20px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background-color: #f9f9f9;
+    }
+    
+    .result-title {
+      text-align: center;
+      color: #1a3b5d;
+      margin-bottom: 20px;
+    }
+    
+    .result-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+    
+    .result-item {
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    
+    .result-item .apartment {
+      font-weight: bold;
+      color: #1a3b5d;
+      font-size: 1.2em;
+    }
+    
+    .result-item .spot {
+      font-size: 1.5em;
+      color: #2c5c8a;
+      margin: 10px 0;
+    }
+    
+    .controls {
+      text-align: center;
+      margin: 30px 0;
+    }
+    
+    #pdf-content {
+      display: none;
+    }
+    
+    .pdf-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    
+    .pdf-title {
+      color: #1a3b5d;
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+    
+    .pdf-subtitle {
+      color: #555;
+      font-size: 18px;
+    }
+    
+    .pdf-result-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    
+    .pdf-result-item {
+      border: 1px solid #ddd;
+      padding: 15px;
+      text-align: center;
+      border-radius: 5px;
+    }
+    
+    .pdf-apartment {
+      font-weight: bold;
+      color: #1a3b5d;
+      font-size: 18px;
+    }
+    
+    .pdf-spot {
+      font-size: 20px;
+      color: #2c5c8a;
+      margin: 10px 0;
+    }
+    
+    .pdf-date {
+      text-align: right;
+      margin-top: 30px;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="topo"></div>
+  <div class="container">
+
+    <!-- Cabeçalho -->
+    <div class="header">
+      <div class="brand">
+        <img src="images/logo-22-ot.jpg" alt="Edifício Portugal">
+      </div>
+      <div class="title">
+        <h1>Edifício Portugal</h1>
+        <p>Sorteio de Vagas de Garagem</p>
+      </div>
+    </div>
+
+    <!-- Texto informativo -->
+    <div class="info-text">
+      <p><strong>Sorteio de vagas de garagem</strong></p>
+      <p>Serão sorteadas 42 vagas para 40 apartamentos. As vagas de número 5 e 18 não participam do sorteio.</p>
+    </div>
+
+    <!-- Controles do sorteio -->
+    <div class="controls">
+      <button id="draw-btn" class="btn btn-success">Realizar Sorteio</button>
+      <button id="pdf-btn" class="btn btn-primary" disabled>Gerar PDF</button>
+    </div>
+
+    <!-- Resultados do sorteio -->
+    <div id="results" class="result-container" style="display: none;">
+      <h2 class="result-title">Resultado do Sorteio</h2>
+      <div id="result-grid" class="result-grid"></div>
+    </div>
+
+    <!-- Conteúdo para geração de PDF (inicialmente oculto) -->
+    <div id="pdf-content">
+      <div class="pdf-header">
+        <div class="pdf-title">Edifício Portugal</div>
+        <div class="pdf-subtitle">Sorteio de Vagas de Garagem</div>
+      </div>
+      
+      <div id="pdf-result-grid" class="pdf-result-grid"></div>
+      
+      <div class="pdf-date">
+        Data do sorteio: <span id="pdf-date"></span>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // Carregar jsPDF
+    const { jsPDF } = window.jspdf;
+    
+    // Dados do sorteio
+    const totalSpots = 42;
+    const totalApartments = 40;
+    const excludedSpots = [5, 18]; // Vagas que não participam do sorteio
+    
+    // Gerar listas de vagas e apartamentos
+    function generateSpots() {
+      const spots = [];
+      for (let i = 1; i <= totalSpots; i++) {
+        if (!excludedSpots.includes(i)) {
+          spots.push(i);
+        }
+      }
+      return spots;
+    }
+    
+    function generateApartments() {
+      const apartments = [];
+      for (let i = 1; i <= totalApartments; i++) {
+        apartments.push(i);
+      }
+      return apartments;
+    }
+    
+    // Função para embaralhar array (algoritmo Fisher-Yates)
+    function shuffleArray(array) {
+      const newArray = [...array];
+      for (let i = newArray.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+      }
+      return newArray;
+    }
+    
+    // Realizar o sorteio
+    function performDraw() {
+      const spots = generateSpots();
+      const apartments = generateApartments();
+      
+      // Embaralhar vagas
+      const shuffledSpots = shuffleArray(spots);
+      
+      // Associar apartamentos às vagas
+      const results = [];
+      for (let i = 0; i < apartments.length; i++) {
+        results.push({
+          apartment: apartments[i],
+          spot: shuffledSpots[i]
+        });
+      }
+      
+      // Exibir resultados
+      displayResults(results);
+      
+      // Habilitar botão de PDF
+      document.getElementById('pdf-btn').disabled = false;
+      
+      return results;
+    }
+    
+    // Exibir resultados na tela
+    function displayResults(results) {
+      const resultGrid = document.getElementById('result-grid');
+      resultGrid.innerHTML = '';
+      
+      results.forEach(result => {
+        const resultItem = document.createElement('div');
+        resultItem.className = 'result-item';
+        resultItem.innerHTML = `
+          <div class="apartment">Apartamento ${result.apartment}</div>
+          <div class="spot">Vaga ${result.spot}</div>
+        `;
+        resultGrid.appendChild(resultItem);
+      });
+      
+      document.getElementById('results').style.display = 'block';
+    }
+    
+    // Gerar PDF com os resultados
+    function generatePDF(results) {
+      // Preencher conteúdo do PDF
+      const pdfResultGrid = document.getElementById('pdf-result-grid');
+      pdfResultGrid.innerHTML = '';
+      
+      results.forEach(result => {
+        const pdfResultItem = document.createElement('div');
+        pdfResultItem.className = 'pdf-result-item';
+        pdfResultItem.innerHTML = `
+          <div class="pdf-apartment">Apartamento ${result.apartment}</div>
+          <div class="pdf-spot">Vaga ${result.spot}</div>
+        `;
+        pdfResultGrid.appendChild(pdfResultItem);
+      });
+      
+      // Definir data do sorteio
+      const now = new Date();
+      document.getElementById('pdf-date').textContent = now.toLocaleDateString('pt-BR');
+      
+      // Gerar PDF usando html2canvas e jsPDF
+      const element = document.getElementById('pdf-content');
+      element.style.display = 'block';
+      
+      html2canvas(element).then(canvas => {
+        const imgData = canvas.toDataURL('image/png');
+        const pdf = new jsPDF('p', 'mm', 'a4');
+        const imgWidth = 210; // Largura da página A4 em mm
+        const pageHeight = 297; // Altura da página A4 em mm
+        const imgHeight = canvas.height * imgWidth / canvas.width;
+        let heightLeft = imgHeight;
+        let position = 0;
+        
+        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+        
+        // Adicionar novas páginas se necessário
+        while (heightLeft >= 0) {
+          position = heightLeft - imgHeight;
+          pdf.addPage();
+          pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+          heightLeft -= pageHeight;
+        }
+        
+        // Salvar PDF
+        pdf.save('sorteio-vagas-garagem.pdf');
+        
+        // Ocultar conteúdo do PDF novamente
+        element.style.display = 'none';
+      });
+    }
+    
+    // Eventos
+    document.getElementById('draw-btn').addEventListener('click', function() {
+      const results = performDraw();
+      window.currentResults = results; // Armazenar resultados globalmente
+    });
+    
+    document.getElementById('pdf-btn').addEventListener('click', function() {
+      if (window.currentResults) {
+        generatePDF(window.currentResults);
+      }
+    });
+  </script>
+
+</body>
+</html>

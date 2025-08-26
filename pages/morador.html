@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width initial-scale=1">
+  <title>Cadastro de Moradores - Edifício Portugal</title>
+  <!-- jsPDF e AutoTable -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+  <script src="js/mor_script.js" defer></script>
+  <!-- Estilo externo -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="topo"></div>
+  <div class="container">
+    <!-- Cabeçalho -->
+    <div class="header">
+      <div class="brand">
+        <img src="images/logo-22-ot.jpg" alt="Edifício Portugal">
+      </div>
+      <div class="title">
+        <h1>Cadastro de Moradores</h1>
+        <p>Edifício Portugal – Registro de Residentes</p>
+      </div>
+    </div>
+    <!-- Texto informativo -->
+    <div class="info-text">
+      <p><strong>Preencha todos os campos abaixo para cadastrar um novo morador.</strong></p>
+      <p><strong>Em caso de dúvidas, entre em contato com a administração.</strong></p>
+    </div>
+    <!-- Formulário -->
+    <main>
+      <section class="card">
+        <form id="moradorForm">
+          <!-- Dados Pessoais -->
+          <div class="section">
+            <h2>Dados Pessoais</h2>
+            <label>Nome completo</label>
+            <input type="text" name="nome_morador" required />
+            <div class="row">
+              <div>
+                <label>CPF</label>
+                <input type="text" name="cpf_morador" placeholder="000.000.000-00" required />
+              </div>
+              <div>
+                <label>RG</label>
+                <input type="text" name="rg_morador" placeholder="00.000.000-0" />
+              </div>
+              <div>
+                <label>Data de nascimento</label>
+                <input type="date" name="nascimento_morador" required />
+              </div>
+            </div>
+            <div class="row">
+              <div>
+                <label>Nº do apartamento</label>
+                <select name="apartamento" required>
+                  <option value="">Selecione o apartamento</option>
+                  <option value="01">01</option>
+                  <option value="11">11</option>
+                  <option value="12">12</option>
+                  <option value="13">13</option>
+                  <option value="14">14</option>
+                  <option value="21">21</option>
+                  <option value="22">22</option>
+                  <option value="23">23</option>
+                  <option value="24">24</option>
+                  <option value="31">31</option>
+                  <option value="32">32</option>
+                  <option value="33">33</option>
+                  <option value="34">34</option>
+                  <option value="41">41</option>
+                  <option value="42">42</option>
+                  <option value="43">43</option>
+                  <option value="44">44</option>
+                  <option value="51">51</option>
+                  <option value="52">52</option>
+                  <option value="53">53</option>
+                  <option value="54">54</option>
+                  <option value="61">61</option>
+                  <option value="62">62</option>
+                  <option value="63">63</option>
+                  <option value="64">64</option>
+                  <option value="71">71</option>
+                  <option value="72">72</option>
+                  <option value="73">73</option>
+                  <option value="74">74</option>
+                  <option value="81">81</option>
+                  <option value="82">82</option>
+                  <option value="83">83</option>
+                  <option value="84">84</option>
+                  <option value="91">91</option>
+                  <option value="92">92</option>
+                  <option value="93">93</option>
+                  <option value="94">94</option>
+                  <option value="101">101</option>
+                  <option value="102">102</option>
+                  <option value="103">103</option>
+                  <option value="104">104</option>
+                </select>
+              </div>
+              <div>
+                <label>Estado civil</label>
+                <select name="estado_civil" required>
+                  <option value="">Selecione</option>
+                  <option value="Solteiro(a)">Solteiro(a)</option>
+                  <option value="Casado(a)">Casado(a)</option>
+                  <option value="Divorciado(a)">Divorciado(a)</option>
+                  <option value="Viúvo(a)">Viúvo(a)</option>
+                  <option value="Separado(a)">Separado(a)</option>
+                  <option value="União Estável">União Estável</option>
+                </select>
+              </div>
+              <div>
+                <label>Profissão</label>
+                <input type="text" name="profissao" required />
+              </div>
+            </div>
+            <div class="row">
+              <div>
+                <label>Celular</label>
+                <input type="tel" name="celular" placeholder="(11) 99999-9999" required />
+              </div>
+              <div>
+                <label>Email</label>
+                <input type="email" name="email" required />
+              </div>
+            </div>
+
+            <!-- Preferência de Recebimento de Boleto -->
+            <div class="section">
+              <h2>Recebimento de Boleto</h2>
+              <label>Deseja receber o boleto em outro endereço?</label>
+              <div style="margin: 8px 0;">
+                <label><input type="radio" name="receber_boleto" value="Sim" onchange="toggleEnderecoBoleto()"> Sim</label>
+                <label><input type="radio" name="receber_boleto" value="Não" onchange="toggleEnderecoBoleto()"> Não</label>
+              </div>
+
+              <div id="endereco-boleto" style="display: none; margin-top: 15px; padding: 15px; background: #f9f9fb; border: 1px solid #ddd; border-radius: 6px;">
+                <h3>Endereço para Recebimento do Boleto</h3>
+                <div class="row">
+                  <div>
+                    <label>CEP</label>
+                    <input type="text" name="boleto_cep" id="boleto_cep" placeholder="00000-000" maxlength="9" />
+                  </div>
+                  <div>
+                    <label>Logradouro</label>
+                    <input type="text" name="boleto_logradouro" id="boleto_logradouro" readonly />
+                  </div>
+                  <div>
+                    <label>Número</label>
+                    <input type="text" name="boleto_numero" id="boleto_numero" />
+                  </div>
+                </div>
+                <div class="row">
+                  <div>
+                    <label>Complemento</label>
+                    <input type="text" name="boleto_complemento" id="boleto_complemento" />
+                  </div>
+                  <div>
+                    <label>Bairro</label>
+                    <input type="text" name="boleto_bairro" id="boleto_bairro" readonly />
+                  </div>
+                  <div>
+                    <label>Cidade</label>
+                    <input type="text" name="boleto_cidade" id="boleto_cidade" readonly />
+                  </div>
+                  <div>
+                    <label>UF</label>
+                    <input type="text" name="boleto_uf" id="boleto_uf" readonly style="width: 60px;" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Convênio Médico -->
+          <div class="section">
+            <h2>Convênio Médico</h2>
+            <label>Convênio médico </label>
+            <input type="text" name="convenio_medico" placeholder="Nome do convênio médico" />
+          </div>
+
+ 
+            <!-- Veículo -->
+            <div class="section">
+            <h2>Veículo</h2>
+            <p style="font-size: 0.9em; color: #666; margin-bottom: 10px;">Caso seu veículo não esteja cadastrado, digite modelo e marca. Sendo possível informar apenas um veiculo.</p>
+            
+            <div class="dynamic-item">
+                <div class="row">
+                <div>
+                    <label>Marca</label>
+                    <input list="marcas" name="veiculo_marca" id="veiculo_marca" required />
+                    <datalist id="marcas">
+                    <option value="Fiat">
+                    <option value="Volkswagen">
+                    <option value="Chevrolet">
+                    <option value="Ford">
+                    <option value="Honda">
+                    <option value="Toyota">
+                    <option value="Hyundai">
+                    <option value="Renault">
+                    <option value="Nissan">
+                    <option value="Peugeot">
+                    <option value="Mitsubishi">
+                    <option value="Jeep">
+                    <option value="Mercedes-Benz">
+                    <option value="BMW">
+                    <option value="Audi">
+                    <option value="Volvo">
+                    </datalist>
+                </div>
+                <div>
+                    <label>Modelo</label>
+                    <input list="modelos" name="veiculo_modelo" id="veiculo_modelo" required />
+                    <datalist id="modelos"></datalist>
+                </div>
+                <div>
+                    <label>Ano</label>
+                    <input type="number" name="veiculo_ano" min="1900" max="2030" />
+                </div>
+                </div>
+                <div class="row">
+                <div>
+                    <label>Cor</label>
+                    <input type="text" name="veiculo_cor" required />
+                </div>
+                <div>
+                    <label>Placa</label>
+                    <input type="text" name="veiculo_placa" placeholder="ABC-1234" required />
+                </div>
+                </div>
+            </div>
+            </div>
+
+          <!-- Contato de Emergência -->
+          <div class="section">
+            <h2>Contato de Emergência</h2>
+            <p style="font-size: 0.9em; color: #666; margin-bottom: 10px;">É obrigatório informar pelo menos um contato de emergência.</p>
+            <div id="contatos-emergencia-list" class="dynamic-list"></div>
+            <button type="button" onclick="addContatoEmergencia()">+ Adicionar Contato de Emergência</button>
+          </div>
+
+          <!-- Outros Moradores da Unidade -->
+          <div class="section">
+            <h2>Outros Moradores da Unidade</h2>
+            <p style="font-size: 0.9em; color: #666; margin-bottom: 10px;">Moradores que residem no mesmo apartamento.</p>
+            <div id="moradores-list" class="dynamic-list"></div>
+            <button type="button" onclick="addMorador()">+ Adicionar Morador</button>
+          </div>
+
+          <!-- Funcionários Domésticos -->
+          <div class="section">
+            <h2>Funcionários Domésticos</h2>
+            <div id="funcionarios-list" class="dynamic-list"></div>
+            <button type="button" onclick="addFuncionario()">+ Adicionar Funcionário</button>
+          </div>
+
+          <!-- Outras Informações -->
+          <div class="section">
+            <h2>Outras Informações</h2>
+            <label>Nº de Bicicletas</label>
+            <input type="number" name="bicicletas" min="0" value="0" />
+            <label>Possui Animais Domésticos?</label>
+            <div style="margin: 8px 0;">
+              <label><input type="radio" name="animais" value="Sim" onchange="toggleAnimais()"> Sim</label>
+              <label><input type="radio" name="animais" value="Não" onchange="toggleAnimais()"> Não</label>
+            </div>
+            <div id="animais-info" class="animal-info" style="display: none;">
+              <div id="animais-list"></div>
+              <button type="button" onclick="addAnimal()">+ Adicionar Animal</button>
+            </div>
+            <label>Observações gerais</label>
+            <textarea name="observacoes" rows="3" placeholder="Informações adicionais sobre o morador..."></textarea>
+          </div>
+
+          <!-- Botão de envio -->
+          <button type="submit" class="btn-submit">Salvar em PDF</button>
+        </form>
+        <!-- Mensagem de resultado -->
+        <div id="mensagem"></div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

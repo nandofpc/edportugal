@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Edifício Portugal - Início</title>
+  <link rel="icon" type="image/png" sizes="16x16" href="pages/images/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="pages/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="pages/images/favicon-48x48.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="pages/images/favicon-180x180.png">
+  <link rel="icon" href="pages/images/favicon.ico" type="image/x-icon">
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background-color: #f4f6f9;
+      margin: 0;
+      padding: 20px;
+      color: #333;
+    }
+    .container {
+      max-width: 900px;
+      margin: auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    #topo {
+      height: 6px;
+      background: linear-gradient(90deg, #1a3b5d, #2c5c8a);
+      margin-bottom: 20px;
+      border-radius: 3px;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 25px;
+      border-bottom: 2px solid #eee;
+      padding-bottom: 15px;
+    }
+    .header .brand img {
+      width: 80px;
+      border-radius: 8px;
+    }
+    .header .title h1 {
+      margin: 0;
+      font-size: 1.8em;
+      color: #1a3b5d;
+    }
+    .header .title p {
+      margin: 5px 0 0;
+      color: #555;
+      font-size: 0.95em;
+    }
+
+    .info-text {
+      background-color: #e7f3ff;
+      border-left: 4px solid #2c5c8a;
+      padding: 15px;
+      margin-bottom: 30px;
+      color: #333;
+      font-size: 0.95em;
+      border-radius: 4px;
+    }
+    .info-text strong {
+      color: #1a3b5d;
+    }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .card-btn {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      transition: all 0.3s ease;
+      text-decoration: none;
+      color: #333;
+      display: block;
+    }
+    .card-btn:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+      border-color: #2c5c8a;
+    }
+    .card-btn h3 {
+      margin: 0 0 10px 0;
+      font-size: 1.2em;
+      color: #1a3b5d;
+    }
+    .card-btn p {
+      margin: 0;
+      font-size: 0.95em;
+      color: #555;
+    }
+    .icon {
+      font-size: 2.5em;
+      color: #2c5c8a;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="topo"></div>
+  <div class="container">
+
+    <!-- Cabeçalho -->
+    <div class="header">
+      <div class="brand">
+        <img src="pages/images/logo-22-ot.jpg" alt="Edifício Portugal">
+      </div>
+      <div class="title">
+        <h1>Edifício Portugal</h1>
+        <p>Painel de Acesso Rápido</p>
+      </div>
+    </div>
+
+    <!-- Texto informativo -->
+    <div class="info-text">
+      <p><strong>Bem-vindo ao sistema de gestão do Edifício Portugal.</strong></p>
+      <p>Selecione uma das opções abaixo para realizar ações comuns no condomínio.</p>
+    </div>
+
+    <!-- Menu de Acesso Rápido -->
+    <div class="menu-grid">
+      
+      <!-- Normas do Condomínio -->
+      <a href="pages/normas.html" class="card-btn">
+        <div class="icon">📜</div>
+        <h3>Normas do Condomínio</h3>
+        <p>Consulte as regras e regulamentos internos</p>
+      </a>
+
+      <!-- Cadastro Morador -->
+      <a href="pages/morador.html" class="card-btn">
+        <div class="icon">👨‍👩‍👧‍👦</div>
+        <h3>Cadastro Morador</h3>
+        <p>Atualização de informações do morador</p>
+      </a>
+
+      <!-- Cadastrar Inquilino -->
+      <a href="pages/inquilino.html" class="card-btn">
+        <div class="icon">🏠</div>
+        <h3>Cadastro de Inquilino</h3>
+        <p>Registre um novo inquilino no sistema</p>
+      </a>
+
+      <!-- Relatar Ocorrência -->
+      <a href="pages/ocorrencia.html" class="card-btn">
+        <div class="icon">🚨</div>
+        <h3>Relatar Ocorrência</h3>
+        <p>Comunique problemas ou situações urgentes</p>
+      </a>
+
+      <!-- Relatar Ocorrência -->
+      <a href="pages/comu_obra.html" class="card-btn">
+        <div class="icon">🛠️</div>
+        <h3>Comunicar Inicio de Obras</h3>
+        <p>Informar sobre obras na unidade</p>
+      </a>
+
+    <!-- Rodapé opcional -->
+    <div style="text-align: center; margin-top: 30px; color: #888; font-size: 0.9em;">
+      <p>© 2025 Edifício Portugal – Sistema Interno de Gestão</p>
+    </div>
+
+  </div>
+
+</body>
+</html>

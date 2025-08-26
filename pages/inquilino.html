@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width initial-scale=1">
+  <title>Informar Aluguel de Apartamento - Edifício Portugal</title>
+  <!-- jsPDF e AutoTable -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+  <script src="js/inq_script.js" defer></script>
+      <!-- Estilo externo -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="topo"></div>
+  <div class="container">
+    <!-- Cabeçalho -->
+    <div class="header">
+      <div class="brand">
+        <img src="images/logo-22-ot.jpg" alt="Edifício Portugal">
+      </div>
+      <div class="title">
+        <h1>Informar Aluguel de Apartamento</h1>
+        <p>Edifício Portugal – Cadastro de Locação</p>
+      </div>
+    </div>
+    <!-- Texto informativo -->
+    <div class="info-text">
+      <p><strong>Preencha todos os campos abaixo para informar o aluguel do apartamento.</strong></p>
+      <p><strong>Em caso de dúvidas, entre em contato com a administração.</strong></p>
+    </div>
+    <!-- Formulário -->
+    <main>
+      <section class="card">
+        <form id="aluguelForm">
+          <!-- Dados do Inquilino -->
+          <div class="section">
+            <h2>Dados do Inquilino</h2>
+            <label>Nome completo</label>
+            <input type="text" name="nome_inquilino" required />
+            <div class="row">
+              <div>
+                <label>CPF</label>
+                <input type="text" name="cpf_inquilino" placeholder="000.000.000-00" required />
+              </div>
+              <div>
+                <label>Celular</label>
+                <input type="tel" name="celular" placeholder="(11) 99999-9999" required />
+              </div>
+              <div>
+                <label>Data de nascimento</label>
+                <input type="date" name="nascimento_inquilino" required />
+              </div>
+            </div>
+            <div class="row">
+              <div>
+                <label>Nº do apartamento</label>
+                <select name="apartamento" required>
+                  <option value="">Selecione o apartamento</option>
+                  <option value="11">11</option>
+                  <option value="12">12</option>
+                  <option value="13">13</option>
+                  <option value="14">14</option>
+                  <option value="21">21</option>
+                  <option value="22">22</option>
+                  <option value="23">23</option>
+                  <option value="24">24</option>
+                  <option value="31">31</option>
+                  <option value="32">32</option>
+                  <option value="33">33</option>
+                  <option value="34">34</option>
+                  <option value="41">41</option>
+                  <option value="42">42</option>
+                  <option value="43">43</option>
+                  <option value="44">44</option>
+                  <option value="51">51</option>
+                  <option value="52">52</option>
+                  <option value="53">53</option>
+                  <option value="54">54</option>
+                  <option value="61">61</option>
+                  <option value="62">62</option>
+                  <option value="63">63</option>
+                  <option value="64">64</option>
+                  <option value="71">71</option>
+                  <option value="72">72</option>
+                  <option value="73">73</option>
+                  <option value="74">74</option>
+                  <option value="81">81</option>
+                  <option value="82">82</option>
+                  <option value="83">83</option>
+                  <option value="84">84</option>
+                  <option value="91">91</option>
+                  <option value="92">92</option>
+                  <option value="93">93</option>
+                  <option value="94">94</option>
+                  <option value="101">101</option>
+                  <option value="102">102</option>
+                  <option value="103">103</option>
+                  <option value="104">104</option>
+                </select>
+              </div>
+              <div>
+                <label>Tempo de locação (meses)</label>
+                <input type="number" name="tempo_locacao" min="1" required />
+              </div>
+              <div>
+                <label>Data de início da locação</label>
+                <input type="date" name="inicio_locacao" required />
+              </div>
+            </div>
+            <label>Email</label>
+            <input type="email" name="email" required />
+          </div>
+          
+          <!-- Contatos da Administradora -->
+          <div class="section">
+            <h2>Contatos da Administradora</h2>
+            <label>Nome da Administradora</label>
+            <input type="text" name="nome_adm" required />
+            <label>Nome do Corretor</label>
+            <input type="text" name="nome_corretor" required />
+            <div class="row">
+              <div>
+                <label>Telefone</label>
+                <input type="tel" name="tel_adm" placeholder="(11) 3333-3333" required />
+              </div>
+              <div>
+                <label>Email</label>
+                <input type="email" name="email_adm" placeholder="email@administradora.com.br" required />
+              </div>
+            </div>
+          </div>
+
+          <!-- Convênio Médico -->
+          <div class="section">
+            <h2>Convênio Médico</h2>
+            <label>Convênio médico</label>
+            <input type="text" name="convenio_medico" placeholder="Nome do convênio médico"  />
+          </div>
+
+          <!-- Veículo (apenas um) -->
+          <div class="section">
+            <h2>Veículo</h2>
+            <div class="row">
+              <div>
+                <label>Marca</label>
+                <input type="text" name="veiculo_marca" />
+              </div>
+              <div>
+                <label>Modelo</label>
+                <input type="text" name="veiculo_modelo" />
+              </div>
+              <div>
+                <label>Placa</label>
+                <input type="text" name="veiculo_placa" placeholder="ABC-1234" />
+              </div>
+            </div>
+          </div>
+          
+          <!-- Contato de Emergência -->
+          <div class="section">
+            <h2>Contato de Emergência</h2>
+            <p style="font-size: 0.9em; color: #666; margin-bottom: 10px;">É obrigatório informar pelo menos um contato de emergência.</p>
+            <div id="contatos-emergencia-list" class="dynamic-list"></div>
+            <button type="button" onclick="addContatoEmergencia()">+ Adicionar Contato de Emergência</button>
+          </div>
+
+          <!-- Outros Moradores -->
+          <div class="section">
+            <h2>Outros Moradores</h2>
+            <div id="moradores-list" class="dynamic-list"></div>
+            <button type="button" onclick="addMorador()">+ Adicionar Morador</button>
+          </div>
+          
+          <!-- Funcionários Domésticos -->
+          <div class="section">
+            <h2>Funcionários Domésticos</h2>
+            <div id="funcionarios-list" class="dynamic-list"></div>
+            <button type="button" onclick="addFuncionario()">+ Adicionar Funcionário</button>
+          </div>
+          
+          <!-- Outras Informações -->
+          <div class="section">
+            <h2>Outras Informações</h2>
+            <label>Nº de Bicicletas</label>
+            <input type="number" name="bicicletas" min="0" value="0" />
+            <label>Possui Animais Domésticos?</label>
+            <div style="margin: 8px 0;">
+              <label><input type="radio" name="animais" value="Sim" onchange="toggleAnimais()"> Sim</label>
+              <label><input type="radio" name="animais" value="Não" onchange="toggleAnimais()"> Não</label>
+            </div>
+            <div id="animais-info" class="animal-info" style="display: none;">
+              <div id="animais-list"></div>
+              <button type="button" onclick="addAnimal()">+ Adicionar Animal</button>
+            </div>
+          </div>
+          
+          <!-- Botão de envio -->
+          <button type="submit" class="btn-submit">Salvar em PDF e Enviar por Email</button>
+        </form>
+        
+        <!-- Mensagem de resultado -->
+        <div id="mensagem"></div>
+      </section>
+    </main>
+  </div>
+  
+
+</body>
+</html>

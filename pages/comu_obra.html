@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Comunicação de Obra - Edifício Portugal</title>
+  <!-- jsPDF e AutoTable -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+  <script src="js/script.js" defer></script>
+    <!-- Estilo externo -->
+  <link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+  <div id="topo"></div>
+  <div class="container">
+    <!-- Cabeçalho -->
+    <div class="header">
+      <div class="brand">
+        <img src="images/logo-22-ot.jpg" alt="Edifício Portugal">
+      </div>
+      <div class="title">
+        <h1>Comunicação de Obra</h1>
+        <p>Edifício Portugal – Registro de Reformas</p>
+      </div>
+    </div>
+    <!-- Texto informativo -->
+    <div class="info-text">
+      <p><strong>Informe os detalhes da obra no apartamento e os dados dos prestadores de serviço.</strong></p>
+      <p><strong>O PDF será gerado automaticamente e você poderá enviar por email.</strong></p>
+    </div>
+    <!-- Formulário -->
+    <main>
+      <form id="formaObra">
+        <div class="section">
+          <h2>Dados do Morador</h2>
+          <label>Nome completo</label>
+          <input type="text" name="nome_morador" required />
+
+          <div class="row">
+            <div>
+              <label>Nº do apartamento</label>
+              <select name="apartamento" required>
+                <option value="">Selecione o apartamento</option>
+                <option value="01">01</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+                <option value="13">13</option>
+                <option value="14">14</option>
+                <option value="21">21</option>
+                <option value="22">22</option>
+                <option value="23">23</option>
+                <option value="24">24</option>
+                <option value="31">31</option>
+                <option value="32">32</option>
+                <option value="33">33</option>
+                <option value="34">34</option>
+                <option value="41">41</option>
+                <option value="42">42</option>
+                <option value="43">43</option>
+                <option value="44">44</option>
+                <option value="51">51</option>
+                <option value="52">52</option>
+                <option value="53">53</option>
+                <option value="54">54</option>
+                <option value="61">61</option>
+                <option value="62">62</option>
+                <option value="63">63</option>
+                <option value="64">64</option>
+                <option value="71">71</option>
+                <option value="72">72</option>
+                <option value="73">73</option>
+                <option value="74">74</option>
+                <option value="81">81</option>
+                <option value="82">82</option>
+                <option value="83">83</option>
+                <option value="84">84</option>
+                <option value="91">91</option>
+                <option value="92">92</option>
+                <option value="93">93</option>
+                <option value="94">94</option>
+                <option value="101">101</option>
+                <option value="102">102</option>
+                <option value="103">103</option>
+                <option value="104">104</option>
+              </select>
+            </div>
+            <div>
+              <label>Tipo de obra</label>
+              <select name="tipo_obra" required>
+                <option value="">Selecione</option>
+                <option value="Reforma">Reforma</option>
+                <option value="Pintura">Pintura</option>
+                <option value="Instalação">Instalação elétrica/hidráulica</option>
+                <option value="Outro">Outro</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row">
+            <div>
+              <label>Data de início</label>
+              <input type="date" name="data_inicio" required />
+            </div>
+            <div>
+              <label>Data de término</label>
+              <input type="date" name="data_fim" required />
+            </div>
+          </div>
+
+          <label>Descrição da obra</label>
+          <textarea name="descricao_obra" rows="3" placeholder="Ex: Troca de piso, pintura das paredes, instalação de novo banheiro..." required></textarea>
+        </div>
+
+        <div class="section">
+          <h2>Prestadores de Serviço</h2>
+          <p style="font-size: 0.9em; color: #666;">Adicione os profissionais que realizarão a obra.</p>
+          <div id="prestadores-list" class="dynamic-list"></div>
+          <button type="button" onclick="addPrestador()">+ Adicionar Prestador</button>
+        </div>
+
+        <button type="submit" class="btn-submit">Gerar PDF e Enviar por Email</button>
+      </form>
+
+      <div id="mensagem"></div>
+    </main>
+  </div>
+
+</body>
+</html>
