@@ -543,3 +543,83 @@ document.addEventListener('DOMContentLoaded', function(){
   });
 
 });
+
+// mudança
+// Função para formatar data (ex: 01/01/2025)
+function formatDate(dateStr) {
+  const [year, month, day] = dateStr.split('-');
+  return `${day}/${month}/${year}`;
+}
+
+// Enviar formulário
+const formEl = document.getElementById('mudancaForm');
+const mensagemEl = document.getElementById('mensagem');
+const dataInput = document.getElementById('data_mudanca');
+
+// Calcular data mínima: hoje + 3 dias
+const hoje = new Date();
+const minDate = new Date(hoje);
+minDate.setDate(hoje.getDate() + 3);
+
+// Formatar para o padrão YYYY-MM-DD (usado no input date)
+const minDateString = minDate.toISOString().split('T')[0];
+
+// Aplicar data mínima no campo
+dataInput.setAttribute('min', minDateString);
+
+// Mensagem de ajuda (opcional)
+const infoData = document.createElement('p');
+infoData.style.fontSize = '0.9em';
+infoData.style.color = '#555';
+infoData.style.marginTop = '5px';
+infoData.innerHTML = `<strong>Informação:</strong> A mudança deve ser agendada com no mínimo 3 dias de antecedência.`;
+document.querySelector('label[for="data_mudanca"]')?.parentElement.appendChild(infoData);
+
+formEl.addEventListener('submit', function(e) {
+  e.preventDefault();
+  const formData = new FormData(this);
+  const data = {};
+  for (let [key, value] of formData.entries()) {
+    data[key] = value;
+  }
+
+  // Validação
+  if (!data.nome_morador || !data.apartamento || !data.data_mudanca || !data.hora_mudanca) {
+    mensagemEl.innerHTML = '⚠️ Por favor, preencha todos os campos.';
+    mensagemEl.className = 'error';
+    mensagemEl.style.display = 'block';
+    return;
+  }
+
+  // Validar data da mudança (mínimo: hoje + 3 dias)
+  const dataSelecionada = new Date(data.data_mudanca);
+  if (dataSelecionada < minDate) {
+    mensagemEl.innerHTML = `⚠️ A data da mudança deve ser a partir de <strong>${formatDate(minDateString)}</strong>.`;
+    mensagemEl.className = 'error';
+    mensagemEl.style.display = 'block';
+    return;
+  }
+
+  // Tudo ok! Gerar mensagem do WhatsApp
+  const mensagem = encodeURIComponent(
+    `*SOLICITAÇÃO DE AGENDAMENTO DE MUDANÇA*\n\n` +
+    `📌 *Morador:* ${data.nome_morador}\n` +
+    `🏠 *Apartamento:* ${data.apartamento}\n` +
+    `📅 *Data:* ${formatDate(data.data_mudanca)}\n` +
+    `⏰ *Horário:* ${data.hora_mudanca}\n\n` +
+    `Por favor, confirme a disponibilidade do elevador e do hall social.`
+  );
+
+  // Número do síndico (substitua pelo número real)
+  const numeroSindico = '5511999998888'; // Ex: 55 + DDD + número
+  const url = `https://wa.me/${numeroSindico}?text=${mensagem}`;
+
+  // Abrir WhatsApp
+  window.open(url, '_blank');
+
+  // Mensagem de sucesso
+  mensagemEl.innerHTML = `✅ Solicitação enviada com sucesso!<br>Abra o WhatsApp para confirmar o envio.`;
+  mensagemEl.className = 'success';
+  mensagemEl.style.display = 'block';
+});
+// fim mudança
