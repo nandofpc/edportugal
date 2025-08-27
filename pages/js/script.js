@@ -623,3 +623,146 @@ formEl.addEventListener('submit', function(e) {
   mensagemEl.style.display = 'block';
 });
 // fim mudança
+
+// corretores
+    // Contador de corretores
+    let corretorCount = 0;
+
+    // Adicionar Corretor
+    function addCorretor() {
+    const container = document.getElementById('corretores-list');
+    const div = document.createElement('div');
+    div.className = 'dynamic-item';
+    div.innerHTML = `
+        <button type="button" class="remove" onclick="this.parentElement.remove()">X</button>
+        <div>
+        <label>Nome completo</label>
+        <input type="text" name="corretor_nome_${corretorCount}" required />
+        </div>
+        <div class="row">
+        <div>
+            <label>CRECI</label>
+            <input type="text" name="corretor_creci_${corretorCount}" placeholder="SP-12345" required />
+        </div>
+        <div>
+            <label>Dias de visita permitidos</label>
+            <select name="corretor_dias_${corretorCount}" required>
+            <option value="">Selecione</option>
+            <option value="Segunda a Sexta">Segunda a Sexta</option>
+            <option value="Segunda a Sábado">Segunda a Sábado</option>
+            </select>
+        </div>
+        </div>
+    `;
+    container.appendChild(div);
+    corretorCount++;
+    }
+
+    // Adicionar primeiro corretor automaticamente
+    document.addEventListener('DOMContentLoaded', function() {
+      addCorretor();
+    });
+
+    // Enviar formulário
+   
+
+    formEl.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      const data = {};
+      for (let [key, value] of formData.entries()) {
+        data[key] = value;
+      }
+
+      // Validar dados do proprietário
+      if (!data.nome_proprietario || !data.apartamento) {
+        mensagemEl.innerHTML = '⚠️ Por favor, preencha todos os dados do proprietário.';
+        mensagemEl.className = 'error';
+        mensagemEl.style.display = 'block';
+        return;
+      }
+
+      // Coletar corretores
+      const corretores = [];
+      for (let i = 0; i < corretorCount; i++) {
+        const nome = data[`corretor_nome_${i}`];
+        const creci = data[`corretor_creci_${i}`];
+        const dias = data[`corretor_dias_${i}`];
+        if (nome && creci && dias) {
+          corretores.push({ nome, creci, dias });
+        }
+      }
+
+      if (corretores.length === 0) {
+        mensagemEl.innerHTML = '⚠️ Adicione pelo menos um corretor.';
+        mensagemEl.className = 'error';
+        mensagemEl.style.display = 'block';
+        return;
+      }
+
+      // Gerar e-mail em HTML
+      const assunto = encodeURIComponent(`Autorização de Corretores - Apartamento ${data.apartamento}`);
+      const corpoHTML = `
+        <html>
+        <body style="font-family: Arial, sans-serif; color: #333; line-height: 1.6;">
+          <div style="max-width: 600px; margin: auto; border: 1px solid #ddd; border-radius: 8px; overflow: hidden;">
+            <div style="background: linear-gradient(90deg, #1a3b5d, #2c5c8a); color: white; padding: 20px; text-align: center;">
+              <h2 style="margin: 0;">Autorização de Corretores</h2>
+              <p style="margin: 5px 0 0; opacity: 0.9;">Edifício Portugal</p>
+            </div>
+            <div style="padding: 20px;">
+              <p><strong>Proprietário:</strong> ${data.nome_proprietario}</p>
+              <p><strong>Apartamento:</strong> ${data.apartamento}</p>
+              <p><strong>Horário permitido:</strong> 08:00 às 18:00</p>
+              <h3 style="color: #1a3b5d; border-bottom: 1px solid #eee; padding-bottom: 5px;">Corretores Autorizados</h3>
+              <table width="100%" style="border-collapse: collapse; margin: 15px 0;">
+                <tr style="background-color: #f0f4f8; font-weight: bold;">
+                  <td style="padding: 8px; border: 1px solid #ddd;">Nome</td>
+                  <td style="padding: 8px; border: 1px solid #ddd;">CRECI</td>
+                  <td style="padding: 8px; border: 1px solid #ddd;">Dias Permitidos</td>
+                </tr>
+                ${corretores.map(c => `
+                <tr>
+                  <td style="padding: 8px; border: 1px solid #ddd;">${c.nome}</td>
+                  <td style="padding: 8px; border: 1px solid #ddd;">${c.creci}</td>
+                  <td style="padding: 8px; border: 1px solid #ddd;">${c.dias}</td>
+                </tr>
+                `).join('')}
+              </table>
+              <p><em>Este cadastro autoriza os corretores listados a agendar visitas ao imóvel dentro do horário permitido.</em></p>
+            </div>
+            <div style="background: #f9f9fb; padding: 15px; text-align: center; font-size: 0.9em; color: #666; border-top: 1px solid #eee;">
+              Edifício Portugal &copy; ${new Date().getFullYear()}
+            </div>
+          </div>
+        </body>
+        </html>
+      `.replace(/\s+/g, ' ').trim();
+
+      const corpoTexto = `
+        AUTORIZAÇÃO DE CORRETORES - Edifício Portugal
+
+        Proprietário: ${data.nome_proprietario}
+        Apartamento: ${data.apartamento}
+        Horário permitido: 08:00 às 18:00
+
+        Corretores Autorizados:
+        ${corretores.map(c => `- ${c.nome} (CRECI: ${c.creci}) - ${c.dias}`).join('\n')}
+
+        Este cadastro autoriza os corretores listados a agendar visitas ao imóvel dentro do horário permitido.
+
+        Edifício Portugal © ${new Date().getFullYear()}
+      `.trim();
+
+      // Codificar para mailto
+      const mailtoLink = `mailto:edportugal85@gmail.com?subject=${assunto}&body=${encodeURIComponent(corpoTexto)}&html=${encodeURIComponent(corpoHTML)}`;
+
+      // Abrir e-mail
+      window.location.href = mailtoLink;
+
+      // Mensagem de sucesso
+      mensagemEl.innerHTML = `✅ E-mail aberto com sucesso!<br>Confirme o envio no seu cliente de e-mail.`;
+      mensagemEl.className = 'success';
+      mensagemEl.style.display = 'block';
+    });
+// fim corretores
