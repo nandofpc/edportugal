@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Formulário Personalizado</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      padding: 20px;
+    }
+    .form-container {
+      max-width: 500px;
+      margin: 0 auto;
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    input, button {
+      padding: 10px;
+      margin: 10px 0;
+      width: 100%;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+    button {
+      background: #0066cc;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #0055aa;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="form-container">
+    <h2>Contato</h2>
+    <form id="meuFormulario">
+      <input type="text" id="nome" placeholder="Seu nome" required />
+      <input type="email" id="email" placeholder="Seu e-mail" required />
+      <input type="text" id="assunto" placeholder="Assunto" />
+      <textarea id="mensagem" placeholder="Sua mensagem" rows="5" required></textarea>
+      <button type="submit">Enviar</button>
+    </form>
+  </div>
+
+  <script>
+    const webhookUrl = 'http://34.66.176.190:5678/webhook/5793a603-c385-4d39-9336-b08517722755';
+
+    document.getElementById('meuFormulario').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const data = {
+        nome: document.getElementById('nome').value,
+        email: document.getElementById('email').value,
+        assunto: document.getElementById('assunto').value,
+        mensagem: document.getElementById('mensagem').value,
+        timestamp: new Date().toISOString()
+      };
+
+      try {
+        const response = await fetch(webhookUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        });
+
+        if (response.ok) {
+          alert('Mensagem enviada com sucesso!');
+          document.getElementById('meuFormulario').reset();
+        } else {
+          alert('Erro ao enviar. Tente novamente.');
+        }
+      } catch (error) {
+        console.error('Erro:', error);
+        alert('Erro de conexão. Verifique o console.');
+      }
+    });
+  </script>
+
+</body>
+</html>
