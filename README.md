@@ -1,4 +1,5 @@
 # 🏢 Edifício Portugal – Portal do Condomínio
+![](https://komarev.com/ghpvc/?username=nandofpc&color=blue)
 
 Bem-vindo ao **Portal do Condomínio Edifício Portugal**, uma solução web moderna e intuitiva para facilitar a gestão do dia a dia do condomínio.  
 Este portal permite que **moradores** e **administradores** acessem normas, realizem cadastros, reservem áreas comuns e informem obras de forma prática e organizada.
