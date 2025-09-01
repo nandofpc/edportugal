@@ -113,6 +113,7 @@ O sistema é composto por páginas independentes, cada uma com uma função espe
 
 ---
 
+
 <div align="center">
   <img src="assets/logo_edificio_portugal.jpg" alt="Logo Edifício Portugal" width="150" />
   <p><strong>Edifício Portugal – Portal do Condomínio</strong><br>Modernidade, praticidade e organização para todos os moradores.</p>
