@@ -547,12 +547,28 @@ document.addEventListener('DOMContentLoaded', function(){
 document.getElementById('mudancaForm').addEventListener('submit', function(e) {
   e.preventDefault();
   const formData = new FormData(this);
+
+  // Verificação da data: mínimo 2 dias à frente
+  const dataMudanca = formData.get('data_mudanca');
+  const hoje = new Date();
+  hoje.setHours(0, 0, 0, 0); // Zera hora para comparar só a data
+
+  // Data mínima permitida: hoje + 2 dias
+  const minData = new Date(hoje);
+  minData.setDate(minData.getDate() + 2);
+
+  const dataSelecionada = new Date(dataMudanca);
+
+  if (!dataMudanca || dataSelecionada < minData) {
+    alert('A mudança só pode ser agendada com no mínimo 2 dias de antecedência.');
+    return;
+  }
+
   let mensagem = `*Comunicação de Mudança - Edifício Portugal*\n\n`;
   mensagem += `*Nome Morador:* ${formData.get('nome_morador')}\n`;
   mensagem += `*Apartamento:* ${formData.get('apartamento')}\n`;
   mensagem += `*Data:* ${formData.get('data_mudanca')}\n`;
   mensagem += `*Horário:* ${formData.get('hora_mudanca')}\n`;
-  
 
   // Número do WhatsApp do síndico/administrador
   const numero = '5511942560153'; // Substitua pelo número real
@@ -563,4 +579,4 @@ document.getElementById('mudancaForm').addEventListener('submit', function(e) {
   // Abre o WhatsApp Web
   window.open(url, '_blank');
 });
-// ...existing code mudança...
+// ...existing
