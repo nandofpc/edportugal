@@ -543,3 +543,24 @@ document.addEventListener('DOMContentLoaded', function(){
   });
 
 });
+// ...mudanca .
+document.getElementById('mudancaForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const formData = new FormData(this);
+  let mensagem = `*Comunicação de Mudança - Edifício Portugal*\n\n`;
+  mensagem += `*Nome Morador:* ${formData.get('nome_morador')}\n`;
+  mensagem += `*Apartamento:* ${formData.get('apartamento')}\n`;
+  mensagem += `*Data:* ${formData.get('data_mudanca')}\n`;
+  mensagem += `*Horário:* ${formData.get('hora_mudanca')}\n`;
+  
+
+  // Número do WhatsApp do síndico/administrador
+  const numero = '5511942560153'; // Substitua pelo número real
+
+  // Monta o link do WhatsApp
+  const url = `https://wa.me/${numero}?text=${encodeURIComponent(mensagem)}`;
+
+  // Abre o WhatsApp Web
+  window.open(url, '_blank');
+});
+// ...existing code mudança...
