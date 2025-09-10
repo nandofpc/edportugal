@@ -386,3 +386,11 @@ img {
   max-width: 100%;
   height: auto;
 }
+/* Destaque para coluna de vagas */
+.destaque-vaga {
+  background-color: #e7f3ff; /* Fundo azul claro como .info-text */
+  color: #1a3b5d;
+  font-weight: bold;
+  border-left: 4px solid #2c5c8a; /* Borda lateral azul */
+  padding-left: 8px !important;
+}
